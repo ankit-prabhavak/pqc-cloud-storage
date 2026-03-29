@@ -1,0 +1,38 @@
+# ============================================
+# Docker Compose - PQC Cloud Storage
+# ============================================
+# STATUS: Work in progress
+# Phase 1 → manual local development (3 terminals)
+# Phase 2 → core features complete
+# Phase 3 → uncomment and use this file for team sync
+# ============================================
+
+# TODO: uncomment in Phase 3
+
+# version: '3.8'
+# services:
+#   frontend:
+#     build: ./frontend
+#     ports:
+#       - "3000:3000"
+
+#   backend:
+#     build: ./backend
+#     ports:
+#       - "5000:5000"
+#     env_file: .env
+
+#   crypto-service:
+#     build: ./crypto-service
+#     ports:
+#       - "8000:8000"
+
+#   mongodb:
+#     image: mongo:7
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo_data:/data/db
+
+# volumes:
+#   mongo_data:
