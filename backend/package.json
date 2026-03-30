@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "PQC Cloud Storage - Backend API",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1019.0",
+    "@aws-sdk/s3-request-presigner": "^3.1019.0",
     "axios": "^1.14.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",

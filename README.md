@@ -18,4 +18,4 @@ Current cloud storage systems rely on encryption algorithms like RSA and ECC, wh
 
 **Crypto Service** — Python, FastAPI, AES-256-GCM, ML-KEM (Kyber)
 
-**Cloud Storage** — Cloudinary or AWS S3
+**Cloud Storage** — Cloudflare R2 or AWS S3
