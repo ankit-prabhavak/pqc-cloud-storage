@@ -97,19 +97,7 @@ Stores the encrypted file blobs and nothing else. R2 is private by default — f
 
 ### Upload
 
-```
-User selects file
-    → Frontend sends file to backend via multipart form
-    → Backend authenticates the request via JWT
-    → Backend forwards file bytes to crypto service
-    → Crypto service generates a random 256-bit AES key
-    → Crypto service encrypts file using AES-256-GCM
-    → Crypto service encrypts AES key using ML-KEM
-    → Crypto service returns encrypted file + encrypted key + IV + tag
-    → Backend uploads encrypted file to R2 with a random UUID filename
-    → Backend saves metadata + encrypted AES key to MongoDB
-    → Backend responds to frontend with success
-```
+![File Upload Flowchart](diagrams/upload.png)
 
 ### Download
 
