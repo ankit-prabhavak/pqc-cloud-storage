@@ -101,23 +101,7 @@ Stores the encrypted file blobs and nothing else. R2 is private by default — f
 
 ### Download
 
-```
-User requests a file
-    → Frontend sends download request to backend
-    → Backend authenticates request via JWT
-    → Backend checks MongoDB — does this user own this file?
-    → Backend fetches encrypted file from R2
-    → Backend fetches encrypted AES key from MongoDB
-    → Backend sends both to crypto service
-    → Crypto service decrypts AES key using ML-KEM
-    → Crypto service decrypts file using AES key
-    → Crypto service returns plain file bytes
-    → Backend streams plain file to user
-    → Backend increments download count, checks download limit
-    → If limit reached, file is deleted
-```
-
----
+![File Download Flowchart](diagrams/download.png)
 
 ## Database Design
 
