@@ -150,4 +150,4 @@ This project is in initial setup. The repository structure, environment configur
 
 ## License
 
-This project is built for academic purposes as a final year project.
+This project is built for academic purposes as a final year project
