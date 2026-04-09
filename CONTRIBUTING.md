@@ -8,12 +8,12 @@ This document explains how to work on this project as a team. Read it fully befo
 
 | Member | Role | Owns | Branch |
 |--------|------|------|--------|
-| Ankit | Project lead | Reviews all PRs, merges into main, resolves conflicts | feature/auth |
-| Member 2 | Backend developer | File upload API, multer, R2 integration | feature/file-upload |
-| Member 3 | Frontend developer | Dashboard UI, file list, upload interface | feature/frontend-ui |
-| Member 4 | Frontend developer | Auth pages, login, register, routing | feature/frontend-auth |
-| Member 5 | Crypto developer | Python crypto service, AES, mock Kyber | feature/crypto |
-| Member 6 | Database developer | Mongoose models, MongoDB, cloud storage config | feature/database |
+| Ankit | Backend developer(Lead) | Reviews all PRs, merges into main, resolves conflicts | feature/auth |
+| Abhinav | Backend developer | File upload API, multer, R2 integration | feature/file-upload |
+| Abhijeet | Frontend developer | Dashboard UI, file list, upload interface | feature/frontend-ui |
+| Devashish | Frontend developer | Auth pages, login, register, routing | feature/frontend-auth |
+| Anmol | Crypto developer | Python crypto service, AES, mock Kyber | feature/crypto |
+| Kavya | Database developer | Mongoose models, MongoDB, cloud storage config | feature/database |
 
 ---
 
