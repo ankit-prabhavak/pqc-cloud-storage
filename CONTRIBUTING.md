@@ -4,19 +4,6 @@ This document explains how to work on this project as a team. Read it fully befo
 
 ---
 
-## Who manages what
-
-| Member | Role | Owns | Branch |
-|--------|------|------|--------|
-| Ankit | Backend developer(Lead) | Reviews all PRs, merges into main, resolves conflicts | feature/auth |
-| Abhinav | Backend developer | File upload API, multer, R2 integration | feature/file-upload |
-| Abhijeet | Frontend developer | Dashboard UI, file list, upload interface | feature/frontend-ui |
-| Devashish | Frontend developer | Auth pages, login, register, routing | feature/frontend-auth |
-| Anmol | Crypto developer | Python crypto service, AES, mock Kyber | feature/crypto |
-| Kavya | Database developer | Mongoose models, MongoDB, cloud storage config | feature/database |
-
----
-
 ## First time setup
 
 ### Step 1 — Clone the repo
@@ -100,7 +87,7 @@ git commit -m "type: short description of what you did"
 git push origin feature/your-branch-name
 ```
 
-When your feature is ready, open a Pull Request on GitHub from your branch into `dev`. Do not merge it yourself — Ankit reviews and merges all PRs.
+When your feature is ready, open a Pull Request on GitHub from your branch into `dev`. Do not merge it yourself — Merging requires review
 
 ---
 
@@ -108,7 +95,7 @@ When your feature is ready, open a Pull Request on GitHub from your branch into 
 
 Every commit message must follow this format:
 
-```
+```text
 type: short description in lowercase
 ```
 
@@ -122,7 +109,8 @@ type: short description in lowercase
 | `style` | formatting, spacing, no logic changes |
 
 Examples of good commit messages:
-```
+
+```text
 feat: add JWT middleware to protect routes
 fix: correct AES decryption returning empty buffer
 chore: update requirements.txt with pydantic version
@@ -131,7 +119,8 @@ refactor: move file upload logic into controller
 ```
 
 Examples of bad commit messages:
-```
+
+```text
 update
 fixed stuff
 working now
@@ -146,14 +135,15 @@ Bad commit messages will be asked to be rewritten before the PR is merged.
 
 When you open a Pull Request:
 
-- Title must describe what the PR does, not just the branch name
-- Add a short description of what you changed and why
-- Link to any related issue if one exists
-- Make sure your branch is up to date with dev before opening the PR
-- Do not merge your own PR
-- Wait for Ankit to review
+- All changes must be made through a Pull Request
+- Do not push directly to protected branches
+- PR title should clearly describe the change
+- Add a short description explaining what was done and why
+- Ensure your branch is up to date with `dev` before opening a PR
+- At least one review is required before merging
+- Address all review comments before merging
 
-Ankit will either approve and merge, or leave review comments asking for changes. If changes are requested, fix them on your branch and push again — the PR updates automatically.
+Once the required review is completed, the PR can be merged.
 
 ---
 
@@ -162,8 +152,8 @@ Ankit will either approve and merge, or leave review comments asking for changes
 - Never push directly to `main`
 - Never push directly to `dev`
 - Always work on your own feature branch
-- Only Ankit merges feature branches into `dev`
-- Only Ankit merges `dev` into `main` at the end of each phase
+- Open a Pull Request to merge changes into dev
+- Merge dev into main only when the project is stable
 
 ---
 
@@ -176,13 +166,14 @@ If you get a merge conflict after running `git merge dev`:
 3. Decide which version to keep, or combine both manually
 4. Save the file
 5. Run:
+
 ```bash
 git add .
 git commit -m "fix: resolve merge conflict with dev"
 git push origin feature/your-branch-name
 ```
 
-If you are unsure how to resolve a conflict, do not guess. Ask Ankit first.
+If you are unsure how to resolve a conflict, do not guess. Discuss with team.
 
 ---
 
@@ -252,16 +243,16 @@ If you accidentally commit a secret, tell Ankit immediately so it can be rotated
 
 ## Project structure reminder
 
-```
+```text
 pqc-cloud-storage/
 ├── frontend/          Member 3 and Member 4
-├── backend/           Ankit and Member 2 and Member 6
+├── backend/           Member 1 and Member 2 and Member 6
 ├── crypto-service/    Member 5
 ├── .env.example       source of truth for environment variables
 └── CONTRIBUTING.md    this file
 ```
 
-Only touch files inside your own service unless you have discussed it with Ankit first. Crossing into another person's service without coordination causes conflicts and confusion.
+Only touch files inside your own service unless you have discussed it with team first. Crossing into another person's service without coordination causes conflicts and confusion.
 
 ---
 
@@ -270,13 +261,13 @@ Only touch files inside your own service unless you have discussed it with Ankit
 - If you are blocked for more than 30 minutes, ask in the group chat
 - If you are going to miss a deadline, say so early
 - If you break something on dev, tell the team immediately
-- All technical decisions that affect more than one service go through Ankit first
+- Discuss changes affecting multiple parts before implementation
 
 ---
 
 ## Phase completion checklist
 
-Before Ankit merges `dev` into `main` at the end of a phase, every member must confirm:
+Before merging `dev` into `main` at the end of a phase, every member must confirm:
 
 - My feature works end to end
 - I have tested it manually
@@ -288,4 +279,4 @@ Before Ankit merges `dev` into `main` at the end of a phase, every member must c
 
 ## Questions
 
-If anything in this document is unclear, ask Ankit before making assumptions.
+If anything in this document is unclear, ask team before making assumptions.
