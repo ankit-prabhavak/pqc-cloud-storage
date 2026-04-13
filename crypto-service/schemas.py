@@ -22,3 +22,4 @@ class HealthResponse(BaseModel):
     kyber_mode: str
     aes_mode: str
     version: str
+
