@@ -10,12 +10,20 @@ const logSchema = new mongoose.Schema({
   fileId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'File',
-    required: true
+    default: null
   },
   action: {
     type: String,
-    enum: ['upload', 'download', 'delete'],
+    enum: ['upload', 'download', 'delete', 'share', 'login', 'logout', 'register', 'otp_sent', 'otp_verified'],
     required: true
+  },
+  ipAddress: {
+    type: String,
+    default: null
+  },
+  userAgent: {
+    type: String,
+    default: null
   },
   timestamp: {
     type: Date,

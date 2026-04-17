@@ -12,6 +12,10 @@ const fileSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  originalName: {
+    type: String,
+    required: true
+  },
   cloudUrl: {
     type: String,
     required: true
@@ -53,10 +57,35 @@ const fileSchema = new mongoose.Schema({
     type: Date,
     default: null,
     index: true
+  },
+  isShared: {
+    type: Boolean,
+    default: false
+  },
+  shareToken: {
+    type: String,
+    default: null
+  },
+  shareExpiresAt: {
+    type: Date,
+    default: null
+  },
+  tags: [{
+    type: String,
+    trim: true
+  }],
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedAt: {
+    type: Date,
+    default: null
   }
 }, { timestamps: true })
 
 fileSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+fileSchema.index({ fileName: 'text', tags: 'text' })
 
 const File = mongoose.model('File', fileSchema)
 export default File
