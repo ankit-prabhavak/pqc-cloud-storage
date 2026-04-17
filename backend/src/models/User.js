@@ -18,6 +18,26 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: 8,
     select: false
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  otp: {
+    code: { type: String, select: false },
+    expiresAt: { type: Date, select: false },
+    attempts: { type: Number, default: 0, select: false }
+  },
+  refreshToken: {
+    type: String,
+    select: false
+  },
+  passwordChangedAt: {
+    type: Date
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true })
 
