@@ -224,13 +224,4 @@ Use Postman:
 
 ---
 
-##  Author
 
-**Anmol Gupta**
-B.Tech CSE (Cybersecurity)
-
----
-
-##  License
-
-This project is for educational purposes.
