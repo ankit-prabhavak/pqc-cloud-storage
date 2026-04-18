@@ -35,8 +35,9 @@ export const register = async (req, res, next) => {
       password: hashedPassword,
       otp: { code: hashedOTP, expiresAt, attempts: 0 }
     })
-
-    await sendOTPEmail(email, name, otp)
+// Sirf development ke liye — OTP console mein print karo
+console.log(`[DEV] OTP for ${email}: ${otp}`)
+    // await sendOTPEmail(email, name, otp)
 
     await Log.create({
       userId: user._id,

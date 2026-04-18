@@ -32,12 +32,51 @@ const userSchema = new mongoose.Schema({
     type: String,
     select: false
   },
+  // 2FA fields
+  twoFactorSecret: {
+    type: String,
+    select: false
+  },
+  twoFactorEnabled: {
+    type: Boolean,
+    default: false
+  },
+  // Security fields
+  loginAttempts: {
+    type: Number,
+    default: 0,
+    select: false
+  },
+  lockUntil: {
+    type: Date,
+    select: false
+  },
+  lastLoginAt: {
+    type: Date
+  },
+  lastLoginIp: {
+    type: String
+  },
   passwordChangedAt: {
     type: Date
   },
   isActive: {
     type: Boolean,
     default: true
+  },
+  // PQC Metadata
+  encryptionPreference: {
+    type: String,
+    enum: ['aes-only', 'hybrid'],
+    default: 'hybrid'
+  },
+  totalFilesUploaded: {
+    type: Number,
+    default: 0
+  },
+  totalStorageUsed: {
+    type: Number,
+    default: 0  // in bytes
   }
 }, { timestamps: true })
 
