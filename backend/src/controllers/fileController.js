@@ -10,6 +10,10 @@ const BUCKET = process.env.R2_BUCKET_NAME
 const CRYPTO_URL = process.env.CRYPTO_SERVICE_URL
 
 // POST /api/files/upload
+import { generateFileHash } from '../utils/fileIntegrity.js'
+import FileVersion from '../models/FileVersion.js'
+import AuditLog from '../models/AuditLog.js'
+
 export const uploadFile = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -20,6 +24,9 @@ export const uploadFile = async (req, res, next) => {
     const originalName = req.file.originalname
     const mimeType = req.file.mimetype
     const fileSize = req.file.size
+
+    // SHA-256 hash of original file BEFORE encryption
+    const fileHash = generateFileHash(fileBuffer)
 
     let encryptedBuffer, encryptedAESKey, iv, tag
 
@@ -34,7 +41,6 @@ export const uploadFile = async (req, res, next) => {
       iv = cryptoResponse.data.iv
       tag = cryptoResponse.data.tag
     } catch {
-      // Phase 1 fallback
       encryptedBuffer = fileBuffer
       encryptedAESKey = 'mock-key-phase1'
       iv = 'mock-iv-phase1'
@@ -60,6 +66,7 @@ export const uploadFile = async (req, res, next) => {
       encryptedAESKey,
       iv,
       tag,
+      fileHash,          // ← new
       fileSize,
       mimeType,
       downloadLimit: downloadLimit ? parseInt(downloadLimit) : null,
@@ -67,12 +74,39 @@ export const uploadFile = async (req, res, next) => {
       tags: tags ? JSON.parse(tags) : []
     })
 
-    await Log.create({
+    // Version 1 create karo
+    await FileVersion.create({
+      fileId: file._id,
+      userId: req.user._id,
+      versionNumber: 1,
+      cloudUrl: storageKey,
+      encryptedAESKey,
+      iv,
+      tag,
+      fileHash,
+      fileSize,
+      encryptionType: file.encryptionType
+    })
+
+    // Update user storage stats
+    await User.findByIdAndUpdate(req.user._id, {
+      $inc: {
+        totalFilesUploaded: 1,
+        totalStorageUsed: fileSize
+      }
+    })
+
+    await AuditLog.create({
       userId: req.user._id,
       fileId: file._id,
       action: 'upload',
       ipAddress: req.ip,
-      userAgent: req.headers['user-agent']
+      metadata: {
+        fileName: originalName,
+        fileSize,
+        encryptionType: file.encryptionType,
+        fileHash
+      }
     })
 
     res.status(201).json({
@@ -82,6 +116,9 @@ export const uploadFile = async (req, res, next) => {
         originalName: file.originalName,
         fileSize: file.fileSize,
         mimeType: file.mimeType,
+        fileHash,
+        encryptionType: file.encryptionType,
+        securityScore: calculateSecurityScore(file),
         createdAt: file.createdAt
       }
     })
@@ -89,7 +126,6 @@ export const uploadFile = async (req, res, next) => {
     next(error)
   }
 }
-
 // GET /api/files
 export const getFiles = async (req, res, next) => {
   try {
