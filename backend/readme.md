@@ -1,11 +1,11 @@
-# 🔐 PQC Cloud Storage – Backend
+#  PQC Cloud Storage – Backend
 
 Backend service for a **Post-Quantum Cryptography based Secure Cloud Storage System**.
 Implements secure authentication, encrypted file handling, and advanced security APIs.
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This backend is built using **Node.js + Express** and powers a cloud storage system where:
 
@@ -16,11 +16,11 @@ This backend is built using **Node.js + Express** and powers a cloud storage sys
   * ML-KEM (CRYSTALS-Kyber) → Key protection
 * Inspired by **NIST FIPS 203 (2024)** standard
 
-📄 Based on full system documentation 
+Based on full system documentation 
 
 ---
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 * Node.js
 * Express.js
@@ -32,7 +32,7 @@ This backend is built using **Node.js + Express** and powers a cloud storage sys
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### 1️⃣ Prerequisites
 
@@ -58,7 +58,7 @@ cp .env.example .env
 npm run dev
 ```
 
-✅ Expected Output:
+Expected Output:
 
 ```
 MongoDB connected
@@ -67,7 +67,7 @@ Backend running on port 5000
 
 ---
 
-## 🔑 Environment Variables
+##  Environment Variables
 
 Create `.env` file inside `backend/`
 
@@ -96,28 +96,28 @@ CRYPTO_SERVICE_URL=http://localhost:8000
 CLIENT_URL=http://localhost:3000
 ```
 
-⚠️ Never commit `.env`
+Never commit `.env`
 
 ---
 
-## 🔐 Core Features
+##  Core Features
 
-* 🔑 JWT Authentication (Login, Refresh, Logout)
-* 📧 OTP-based Email Verification
-* 📂 Secure File Upload & Download
-* 🔗 File Sharing with Expiry Links
-* 🧾 Activity Logging
-* 📊 File Security Scoring
-* 🛡️ File Integrity Check (SHA-256)
-* 📜 Cryptographic Audit Trail (Hash Chain)
-* 📱 Multi-device Session Management
-* 📦 File Versioning
+*  JWT Authentication (Login, Refresh, Logout)
+*  OTP-based Email Verification
+*  Secure File Upload & Download
+*  File Sharing with Expiry Links
+*  Activity Logging
+*  File Security Scoring
+* File Integrity Check (SHA-256)
+*  Cryptographic Audit Trail (Hash Chain)
+*  Multi-device Session Management
+*  File Versioning
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
-### 🔑 Auth APIs
+###  Auth APIs
 
 | Method | Endpoint                  |
 | ------ | ------------------------- |
@@ -131,7 +131,7 @@ CLIENT_URL=http://localhost:3000
 
 ---
 
-### 📂 File APIs
+###  File APIs
 
 | Method | Endpoint                 |
 | ------ | ------------------------ |
@@ -144,7 +144,7 @@ CLIENT_URL=http://localhost:3000
 
 ---
 
-### 🛡️ Security APIs
+###  Security APIs
 
 | Method | Endpoint                        |
 | ------ | ------------------------------- |
@@ -157,7 +157,7 @@ CLIENT_URL=http://localhost:3000
 
 ---
 
-## 🔐 Encryption Workflow
+##  Encryption Workflow
 
 1. File encrypted using AES-256-GCM
 2. AES key encrypted using ML-KEM
@@ -167,7 +167,7 @@ CLIENT_URL=http://localhost:3000
 
 ---
 
-## 📊 Security Score System
+##  Security Score System
 
 | Feature       | Points |
 | ------------- | ------ |
@@ -179,7 +179,7 @@ CLIENT_URL=http://localhost:3000
 
 ---
 
-## 📁 Folder Structure
+##  Folder Structure
 
 ```
 backend/
@@ -197,7 +197,7 @@ backend/
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 Use Postman:
 
@@ -215,7 +215,7 @@ Use Postman:
 
 ---
 
-## ❗ Common Issues
+## Common Issues
 
 * MongoDB error → Check URI
 * Token expired → Increase expiry
@@ -224,13 +224,13 @@ Use Postman:
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Anmol Gupta**
 B.Tech CSE (Cybersecurity)
 
 ---
 
-## 📜 License
+##  License
 
 This project is for educational purposes.
