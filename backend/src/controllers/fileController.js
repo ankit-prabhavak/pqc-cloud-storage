@@ -66,20 +66,17 @@ export const uploadFile = async (req, res, next) => {
     const mimeType     = req.file.mimetype
     const fileSize     = req.file.size
 
-    // SHA-256 of original file — stored for integrity check later
-    const fileHash = generateFileHash(fileBuffer)
-
-    // Encryption type — user preference ya default hybrid
     const encryptionType = req.body.encryptionType || req.user.encryptionPreference || 'hybrid'
 
+    // Step 1 — encrypt the file
     let encrypted_file, aes_key_encrypted, iv, tag, cryptoEncryptionType
 
     try {
       const cryptoRes = await callCryptoEncrypt(fileBuffer, originalName, encryptionType)
-      encrypted_file      = cryptoRes.encrypted_file
-      aes_key_encrypted   = cryptoRes.aes_key_encrypted
-      iv                  = cryptoRes.iv
-      tag                 = cryptoRes.tag
+      encrypted_file       = cryptoRes.encrypted_file
+      aes_key_encrypted    = cryptoRes.aes_key_encrypted
+      iv                   = cryptoRes.iv
+      tag                  = cryptoRes.tag
       cryptoEncryptionType = cryptoRes.encryption_type
 
       console.log(`[CRYPTO] File encrypted — type: ${cryptoEncryptionType}, original: ${cryptoRes.original_size}B, encrypted: ${cryptoRes.encrypted_size}B`)
@@ -90,32 +87,26 @@ export const uploadFile = async (req, res, next) => {
         hint: 'cd crypto-service && uvicorn main:app --reload --port 8000'
       })
     }
-     
-    // encrypted bytes R2 mein store karo
-const storageKey = `${req.user._id}/${uuidv4()}`
-const encryptedBuffer = Buffer.from(encrypted_file, 'base64')
 
-if (process.env.R2_BUCKET_NAME && process.env.R2_BUCKET_NAME !== 'pqc-files-placeholder') {
-  await r2Client.send(new PutObjectCommand({
-    Bucket: BUCKET,
-    Key: storageKey,
-    Body: encryptedBuffer,
-    ContentType: 'application/octet-stream'
-  }))
-} else {
-  console.log(`[R2 SKIP] R2 not configured — skipping cloud storage`)
-}
-    // // encrypted bytes R2 mein store karo
-    // const storageKey = `${req.user._id}/${uuidv4()}`
-    // const encryptedBuffer = Buffer.from(encrypted_file, 'base64')
+    // Step 2 — convert base64 to buffer and hash it
+    const encryptedBuffer = Buffer.from(encrypted_file, 'base64')
+    const fileHash = generateFileHash(encryptedBuffer)
 
-    // await r2Client.send(new PutObjectCommand({
-    //   Bucket: BUCKET,
-    //   Key: storageKey,
-    //   Body: encryptedBuffer,
-    //   ContentType: 'application/octet-stream'
-    // }))
+    // Step 3 — upload to R2
+    const storageKey = `${req.user._id}/${uuidv4()}`
 
+    if (process.env.R2_BUCKET_NAME && process.env.R2_BUCKET_NAME !== 'pqc-files-placeholder') {
+      await r2Client.send(new PutObjectCommand({
+        Bucket: BUCKET,
+        Key: storageKey,
+        Body: encryptedBuffer,
+        ContentType: 'application/octet-stream'
+      }))
+    } else {
+      console.log(`[R2 SKIP] R2 not configured — skipping cloud storage`)
+    }
+
+    // Step 4 — save metadata to MongoDB
     const { downloadLimit, expiresAt, tags } = req.body
 
     const file = await File.create({
@@ -135,7 +126,7 @@ if (process.env.R2_BUCKET_NAME && process.env.R2_BUCKET_NAME !== 'pqc-files-plac
       tags: tags ? JSON.parse(tags) : []
     })
 
-    // Version 1 banao
+    // Step 5 — create version record
     await FileVersion.create({
       fileId: file._id,
       userId: req.user._id,
@@ -149,11 +140,12 @@ if (process.env.R2_BUCKET_NAME && process.env.R2_BUCKET_NAME !== 'pqc-files-plac
       encryptionType: cryptoEncryptionType
     })
 
-    // User storage stats update karo
+    // Step 6 — update user stats
     await User.findByIdAndUpdate(req.user._id, {
       $inc: { totalFilesUploaded: 1, totalStorageUsed: fileSize }
     })
 
+    // Step 7 — audit log
     await AuditLog.create({
       userId: req.user._id,
       fileId: file._id,

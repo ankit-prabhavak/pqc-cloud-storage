@@ -1,4 +1,4 @@
-from pydantic import BaseModel 
+from pydantic import BaseModel # type: ignore
 from typing import Optional
 
 class EncryptResponse(BaseModel):
@@ -22,3 +22,4 @@ class HealthResponse(BaseModel):
     kyber_mode: str
     aes_mode: str
     version: str
+

@@ -1,4 +1,4 @@
-#  PQC Cloud Storage – Backend
+# PQC Cloud Storage – Backend
 
 Backend service for a **Post-Quantum Cryptography based Secure Cloud Storage System**.
 Implements secure authentication, encrypted file handling, and advanced security APIs.
@@ -16,11 +16,11 @@ This backend is built using **Node.js + Express** and powers a cloud storage sys
   * ML-KEM (CRYSTALS-Kyber) → Key protection
 * Inspired by **NIST FIPS 203 (2024)** standard
 
-Based on full system documentation 
+Based on full system documentation
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 * Node.js
 * Express.js
@@ -32,9 +32,9 @@ Based on full system documentation
 
 ---
 
-##  Setup Instructions
+## Setup Instructions
 
-### 1️⃣ Prerequisites
+### Prerequisites
 
 * Node.js (v18+)
 * MongoDB Atlas
@@ -42,7 +42,7 @@ Based on full system documentation
 
 ---
 
-### 2️⃣ Installation
+### Installation
 
 ```bash
 cd backend
@@ -52,7 +52,7 @@ cp .env.example .env
 
 ---
 
-### 3️⃣ Run Server
+### Run Server
 
 ```bash
 npm run dev
@@ -60,14 +60,14 @@ npm run dev
 
 Expected Output:
 
-```
+```text
 MongoDB connected
 Backend running on port 5000
 ```
 
 ---
 
-##  Environment Variables
+## Environment Variables
 
 Create `.env` file inside `backend/`
 
@@ -100,24 +100,24 @@ Never commit `.env`
 
 ---
 
-##  Core Features
+## Core Features
 
-*  JWT Authentication (Login, Refresh, Logout)
-*  OTP-based Email Verification
-*  Secure File Upload & Download
-*  File Sharing with Expiry Links
-*  Activity Logging
-*  File Security Scoring
+* JWT Authentication (Login, Refresh, Logout)
+* OTP-based Email Verification
+* Secure File Upload & Download
+* File Sharing with Expiry Links
+* Activity Logging
+* File Security Scoring
 * File Integrity Check (SHA-256)
-*  Cryptographic Audit Trail (Hash Chain)
-*  Multi-device Session Management
-*  File Versioning
+* Cryptographic Audit Trail (Hash Chain)
+* Multi-device Session Management
+* File Versioning
 
 ---
 
-##  API Endpoints
+## API Endpoints
 
-###  Auth APIs
+### Auth APIs
 
 | Method | Endpoint                  |
 | ------ | ------------------------- |
@@ -131,7 +131,7 @@ Never commit `.env`
 
 ---
 
-###  File APIs
+### File APIs
 
 | Method | Endpoint                 |
 | ------ | ------------------------ |
@@ -144,7 +144,7 @@ Never commit `.env`
 
 ---
 
-###  Security APIs
+### Security APIs
 
 | Method | Endpoint                        |
 | ------ | ------------------------------- |
@@ -157,7 +157,7 @@ Never commit `.env`
 
 ---
 
-##  Encryption Workflow
+## Encryption Workflow
 
 1. File encrypted using AES-256-GCM
 2. AES key encrypted using ML-KEM
@@ -167,7 +167,7 @@ Never commit `.env`
 
 ---
 
-##  Security Score System
+## Security Score System
 
 | Feature       | Points |
 | ------------- | ------ |
@@ -179,9 +179,9 @@ Never commit `.env`
 
 ---
 
-##  Folder Structure
+## Folder Structure
 
-```
+```text
 backend/
  ├── src/
  │   ├── config/
@@ -197,7 +197,7 @@ backend/
 
 ---
 
-##  Testing
+## Testing
 
 Use Postman:
 
@@ -209,9 +209,9 @@ Use Postman:
 
 ---
 
-## 🔍 Health Check
+## Health Check
 
-* Backend → http://localhost:5000/api/health
+* Backend → <http://localhost:5000/api/health>
 
 ---
 
@@ -221,7 +221,3 @@ Use Postman:
 * Token expired → Increase expiry
 * File upload fails → Use form-data
 * Crypto service not running → Start port 8000
-
----
-
-
