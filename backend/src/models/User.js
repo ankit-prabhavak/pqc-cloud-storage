@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+// NOTE: Password hashing is handled manually in authController
+// Do not add a pre-save bcrypt hook here or passwords will double-hash
 const userSchema = new mongoose.Schema({
   name: {
     type: String,

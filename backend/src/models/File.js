@@ -37,6 +37,10 @@ const fileSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  fileHash: {
+    type: String,
+    default: null
+  },
   fileSize: {
     type: Number,
     required: true
