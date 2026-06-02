@@ -19,7 +19,7 @@ import {
   FiUpload,
   FiDatabase,
 } from "react-icons/fi";
-
+import Image from "next/image";
 import { Cpu, ShieldCheck, Fingerprint, TimerOff, EyeOff } from "lucide-react";
 
 export default function LandingPage() {
@@ -1172,7 +1172,6 @@ export default function LandingPage() {
             </div>
 
             {/* Status badge */}
-            
 
             {/* Check rows */}
             <div
@@ -1343,44 +1342,140 @@ export default function LandingPage() {
 
       {/* ────── IMAGE PLACEHOLDER ────── */}
       <section
-        style={{ maxWidth: 1100, margin: "0 auto 96px", padding: "0 24px" }}
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto 120px",
+          padding: "0 24px",
+        }}
       >
         <div
           style={{
-            border: "2px dashed #e5e7eb",
-            borderRadius: 20,
-            padding: "64px 32px",
             textAlign: "center",
-            background: "#fafafa",
+            marginBottom: 48,
           }}
         >
-          <div
+          <span
             style={{
-              width: 48,
-              height: 48,
-              background: "#f3f4f6",
-              borderRadius: 12,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 16px",
+              display: "inline-block",
+              padding: "8px 16px",
+              borderRadius: 999,
+              background: "rgba(249, 115, 22, 0.12)",
+              color: "#f97316",
+              border: "1px solid rgba(249, 115, 22, 0.2)",
+              fontSize: 13,
+              fontWeight: 600,
+              marginBottom: 16,
             }}
           >
-            <FiEye size={22} color="#9ca3af" />
-          </div>
+            Platform Overview
+          </span>
+
+          <h2
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontWeight: 800,
+              color: "#111827",
+              marginBottom: 16,
+            }}
+          >
+            Secure Cloud Storage for the Quantum Era
+          </h2>
+
           <p
             style={{
-              fontSize: 15,
-              fontWeight: 600,
+              maxWidth: 700,
+              margin: "0 auto",
+              fontSize: 18,
+              lineHeight: 1.7,
               color: "#6b7280",
-              marginBottom: 4,
             }}
           >
-            Product screenshot / diagram
+            PQC Cloud Storage combines modern cloud architecture with
+            post-quantum cryptography, helping protect sensitive files against
+            future quantum computing threats.
           </p>
-          <p style={{ fontSize: 13, color: "#9ca3af" }}>
-            1200 × 680px recommended · Replace with your own image
-          </p>
+        </div>
+
+        <div
+          style={{
+            borderRadius: 28,
+            overflow: "hidden",
+            background: "#fff",
+            border: "1px solid #e5e7eb",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.12)",
+            height: 400, // adjust this
+          }}
+        >
+          <img
+            src="/pqc.png"
+            alt="PQC Cloud Storage"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              display: "block",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 24,
+            flexWrap: "wrap",
+            marginTop: 40,
+          }}
+        >
+          {[
+            {
+              title: "AES-256",
+              desc: "File Encryption",
+            },
+            {
+              title: "ML-KEM",
+              desc: "Quantum-Safe Key Exchange",
+            },
+            {
+              title: "Zero-Knowledge",
+              desc: "Privacy Focused",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              style={{
+                minWidth: 220,
+                padding: "24px 32px",
+                borderRadius: 20,
+                background: "#ffffff",
+                border: "1px solid #e5e7eb",
+                textAlign: "center",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: "#111827",
+                  marginBottom: 8,
+                }}
+              >
+                {item.title}
+              </h3>
+
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: 15,
+                  margin: 0,
+                }}
+              >
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 

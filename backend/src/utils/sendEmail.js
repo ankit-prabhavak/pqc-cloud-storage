@@ -5,6 +5,10 @@ export const sendOTPEmail = async (email, name, otp) => {
     from: `"PQC Cloud Storage" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Your OTP - PQC Cloud Storage',
+    headers: {
+      'X-Priority': '1',
+      'X-Mailer': 'PQC-Storage-Mailer'
+    },
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 480px; margin: auto; padding: 32px; border: 1px solid #e0e0e0; border-radius: 8px;">
         <h2 style="color: #1a1a1a;">Hello, ${name} 👋</h2>

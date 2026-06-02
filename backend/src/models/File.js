@@ -59,8 +59,7 @@ const fileSchema = new mongoose.Schema({
   },
   expiresAt: {
     type: Date,
-    default: null,
-    index: true
+    default: null
   },
   isShared: {
     type: Boolean,
