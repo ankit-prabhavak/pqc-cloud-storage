@@ -18,7 +18,7 @@ export default function Navbar() {
   return (
     <nav style={{ background: '#fff', borderBottom: '1px solid #f0f0f0', padding: '0 32px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-        <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+        <Link href={user ? '/dashboard' : '/'} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
           <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FiShield size={13} color="#fff" />
           </div>

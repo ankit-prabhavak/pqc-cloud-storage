@@ -48,10 +48,13 @@ export const register = async (req, res, next) => {
     // console.log(`[DEV] OTP for ${email}: ${otp}`)
     //     // await sendOTPEmail(email, name, otp)
 
-    if (process.env.NODE_ENV === "production") {
+    try {
       await sendOTPEmail(email, name, otp);
-    } else {
-      console.log(`[DEV] OTP for ${email}: ${otp}`);
+      console.log(`[MAIL] OTP sent to ${email}`);
+    } catch (mailError) {
+      console.error("[MAIL ERROR] Register:", mailError.message);
+      console.error("[MAIL ERROR] Code:", mailError.code);
+      console.error("[MAIL ERROR] Response:", mailError.response);
     }
 
     await Log.create({
@@ -110,11 +113,9 @@ export const verifyOTP = async (req, res, next) => {
     if (!isMatch) {
       user.otp.attempts += 1;
       await user.save();
-      return res
-        .status(400)
-        .json({
-          message: `Wrong OTP. ${5 - user.otp.attempts} attempts left.`,
-        });
+      return res.status(400).json({
+        message: `Wrong OTP. ${5 - user.otp.attempts} attempts left.`,
+      });
     }
 
     // OTP correct — verify user and clear OTP
@@ -167,10 +168,13 @@ export const resendOTP = async (req, res, next) => {
 
     // await sendOTPEmail(user.email, user.name, otp)
 
-    if (process.env.NODE_ENV === "production") {
+    try {
       await sendOTPEmail(user.email, user.name, otp);
-    } else {
-      console.log(`[DEV] Resend OTP for ${user.email}: ${otp}`);
+      console.log(`[MAIL] OTP resent to ${user.email}`);
+    } catch (mailError) {
+      console.error("[MAIL ERROR] Resend:", mailError.message);
+      console.error("[MAIL ERROR] Code:", mailError.code);
+      console.error("[MAIL ERROR] Response:", mailError.response);
     }
 
     await Log.create({

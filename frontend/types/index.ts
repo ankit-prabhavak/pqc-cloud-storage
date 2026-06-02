@@ -9,6 +9,7 @@ export interface User {
 }
 
 export interface FileItem {
+  _id: string
   id: string
   originalName: string
   fileSize: number

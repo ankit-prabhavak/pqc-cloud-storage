@@ -14,6 +14,7 @@ import {
 import Navbar from '@/components/ui/Navbar'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 
+
 function formatBytes(bytes: number) {
   if (bytes === 0) return '0 B'
   const k = 1024
@@ -102,34 +103,68 @@ export default function DashboardPage() {
   }
   
   // if (loading || !user)
-  if (loading || !user) return <LoadingSpinner />
+  // if (loading || !user) return <LoadingSpinner />
+  if (loading) {
+      return <LoadingSpinner />
+  }
+
+  if (!user) {
+      return null
+  }
+
+  // const statCards = [
+  //   {
+  //     label: 'Total Files',
+  //     value: statsLoading ? '—' : String(stats?.totalFiles ?? 0),
+  //     icon: <FiFile size={18} color="#6b7280" />,
+  //     sub: 'uploaded'
+  //   },
+  //   {
+  //     label: 'Storage Used',
+  //     value: statsLoading ? '—' : formatBytes(stats?.totalStorageUsed ?? 0),
+  //     icon: <FiGrid size={18} color="#6b7280" />,
+  //     sub: 'encrypted on R2'
+  //   },
+  //   {
+  //     label: 'Encryption',
+  //     value: user.encryptionPreference === 'hybrid' ? 'Hybrid' : 'AES Only',
+  //     icon: <FiLock size={18} color="#6b7280" />,
+  //     sub: user.encryptionPreference === 'hybrid' ? 'AES + ML-KEM' : 'AES-256-GCM'
+  //   },
+  //   {
+  //     label: 'Recent Activity',
+  //     value: statsLoading ? '—' : String(stats?.recentActivity?.length ?? 0),
+  //     icon: <FiActivity size={18} color="#6b7280" />,
+  //     sub: 'logged actions'
+  //   },
+  // ]
 
   const statCards = [
-    {
-      label: 'Total Files',
-      value: statsLoading ? '—' : String(stats?.totalFiles ?? 0),
-      icon: <FiFile size={18} color="#6b7280" />,
-      sub: 'uploaded'
-    },
-    {
-      label: 'Storage Used',
-      value: statsLoading ? '—' : formatBytes(stats?.totalStorageUsed ?? 0),
-      icon: <FiGrid size={18} color="#6b7280" />,
-      sub: 'encrypted on R2'
-    },
-    {
-      label: 'Encryption',
-      value: user.encryptionPreference === 'hybrid' ? 'Hybrid' : 'AES Only',
-      icon: <FiLock size={18} color="#6b7280" />,
-      sub: user.encryptionPreference === 'hybrid' ? 'AES + ML-KEM' : 'AES-256-GCM'
-    },
-    {
-      label: 'Recent Activity',
-      value: statsLoading ? '—' : String(stats?.recentActivity?.length ?? 0),
-      icon: <FiActivity size={18} color="#6b7280" />,
-      sub: 'logged actions'
-    },
-  ]
+  {
+    label: 'Total Files',
+    value: statsLoading ? '—' : String(stats?.totalFiles ?? 0),
+    icon: <FiFile size={18} color="#6b7280" />,
+    sub: 'uploaded'
+  },
+  {
+    label: 'Storage Used',
+    value: statsLoading ? '—' : formatBytes(stats?.totalStorageUsed ?? 0),
+    icon: <FiGrid size={18} color="#6b7280" />,
+    sub: 'encrypted on R2'
+  },
+  {
+    label: 'Quantum-safe files',
+    value: statsLoading ? '—' : String(files.filter(f => f.encryptionType === 'hybrid').length),
+    icon: <FiShield size={18} color="#6b7280" />,
+    sub: `of ${files.length} files with ML-KEM`
+  },
+  {
+    label: 'Recent Activity',
+    value: statsLoading ? '—' : String(stats?.recentActivity?.length ?? 0),
+    icon: <FiActivity size={18} color="#6b7280" />,
+    sub: 'logged actions'
+  },
+]
 
   return (
     <div style={{ minHeight: '100vh', background: '#fafafa', fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
@@ -226,7 +261,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Files table */}
-        <div style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 16, overflow: 'hidden' }}>
+        <div style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 16, overflow: 'hidden'}}>
           <div style={{ padding: '20px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{ fontSize: 15, fontWeight: 600, color: '#111827' }}>Your files</h2>
             <span style={{ fontSize: 12, color: '#9ca3af', fontFamily: 'DM Mono, monospace' }}>{files.length} files</span>
@@ -247,7 +282,7 @@ export default function DashboardPage() {
               </button>
             </div>
           ) : (
-            <div>
+            <div style={{ marginBottom: 72 }}>
               {/* Table header */}
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 80px', padding: '10px 24px', borderBottom: '1px solid #f9fafb' }}>
                 {['Name', 'Size', 'Encryption', 'Uploaded', ''].map(h => (
