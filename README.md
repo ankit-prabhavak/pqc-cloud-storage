@@ -147,7 +147,3 @@ This project is in initial setup. The repository structure, environment configur
 | Phase 4 | Self-destruct, activity logs, search, Docker | Pending |
 
 ---
-
-## License
-
-This project is built for academic purposes as a final year project.
