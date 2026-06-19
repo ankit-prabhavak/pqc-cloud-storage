@@ -80,6 +80,47 @@ export const uploadFile = async (req, res, next) => {
     const mimeType = req.file.mimetype;
     const fileSize = req.file.size;
 
+    // ── QUOTA AND LIMIT CHECKS ────────────────────────────────────────────────────
+
+    const MAX_STORAGE_PER_USER =
+      parseInt(process.env.MAX_STORAGE_PER_USER_MB || "100") * 1024 * 1024;
+    const MAX_FILES_PER_USER = parseInt(process.env.MAX_FILES_PER_USER || "20");
+    const MAX_FILE_SIZE =
+      parseInt(process.env.MAX_FILE_SIZE_MB || "10") * 1024 * 1024;
+
+    // File size check
+    if (fileSize > MAX_FILE_SIZE) {
+      return res.status(400).json({
+        message: `File too large. Maximum size is ${process.env.MAX_FILE_SIZE_MB || "10"}MB.`,
+      });
+    }
+
+    // Storage quota check
+    const currentUser = await User.findById(req.user._id);
+    if (currentUser.totalStorageUsed + fileSize > MAX_STORAGE_PER_USER) {
+      return res.status(403).json({
+        message: "Storage quota exceeded.",
+        used: currentUser.totalStorageUsed,
+        limit: MAX_STORAGE_PER_USER,
+        hint: "Delete some files to free up space.",
+      });
+    }
+
+    // File count check
+    const fileCount = await File.countDocuments({
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (fileCount >= MAX_FILES_PER_USER) {
+      return res.status(403).json({
+        message: `File limit reached. Maximum ${MAX_FILES_PER_USER} files per account.`,
+        hint: "Delete existing files to upload new ones.",
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────
+
     const encryptionType =
       req.body.encryptionType || req.user.encryptionPreference || "hybrid";
 
@@ -101,6 +142,10 @@ export const uploadFile = async (req, res, next) => {
       console.log(
         `[CRYPTO] File encrypted — type: ${cryptoEncryptionType}, original: ${cryptoRes.original_size}B, encrypted: ${cryptoRes.encrypted_size}B`,
       );
+
+      // Zero plaintext buffer immediately after encryption
+      fileBuffer.fill(0); // security best practice
+
     } catch (cryptoError) {
       console.error("[CRYPTO] Service unavailable:", cryptoError.message);
       return res.status(503).json({

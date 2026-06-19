@@ -7,6 +7,8 @@ import authRoutes from './routes/authRoutes.js'
 import fileRoutes from './routes/fileRoutes.js'
 import securityRoutes from './routes/securityRoutes.js'
 import { errorHandler } from './middleware/errorHandler.js'
+import { apiLimiter } from './middleware/rateLimiter.js'  // apply global rate limiting to all /api routes
+
 
 const app = express()
 
@@ -18,6 +20,8 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser())
+app.use('/api', apiLimiter)  // applies to all /api routes
+
 
 app.use('/api/auth', authRoutes)
 app.use('/api/files', fileRoutes)

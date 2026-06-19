@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import protect from '../middleware/auth.js'
-import { uploadLimiter } from '../middleware/rateLimiter.js'
+import { uploadLimiter, downloadLimiter } from '../middleware/rateLimiter.js'
 import {
   uploadFile,
   getFiles,
@@ -14,9 +14,12 @@ import {
 } from '../controllers/fileController.js'
 
 const router = express.Router()
+
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 100 * 1024 * 1024 }
+  limits: {
+    fileSize: parseInt(process.env.MAX_FILE_SIZE_MB || '10') * 1024 * 1024
+  }
 })
 
 // Public route — no auth
@@ -29,7 +32,7 @@ router.get('/stats', getStats)
 router.get('/logs', getLogs)
 router.post('/upload', uploadLimiter, upload.single('file'), uploadFile)
 router.get('/', getFiles)
-router.get('/download/:id', downloadFile)
+router.get('/download/:id', downloadLimiter, downloadFile)  // download limiter added
 router.delete('/:id', deleteFile)
 router.post('/share/:id', shareFile)
 

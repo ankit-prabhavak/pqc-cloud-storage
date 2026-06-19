@@ -260,6 +260,37 @@ export default function DashboardPage() {
           ))}
         </div>
 
+        {/* Storage quota bar */}
+<div style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+    <span style={{ fontSize: 13, fontWeight: 500, color: '#374151' }}>Storage quota</span>
+    <span style={{ fontSize: 12, color: '#6b7280', fontFamily: 'DM Mono, monospace' }}>
+      {formatBytes(user.totalStorageUsed ?? 0)} / {formatBytes(user.storageQuota ?? 100 * 1024 * 1024)}
+    </span>
+  </div>
+  <div style={{ height: 5, background: '#f3f4f6', borderRadius: 999, overflow: 'hidden' }}>
+    <div style={{
+      height: '100%',
+      borderRadius: 999,
+      transition: 'width 0.3s ease',
+      width: `${Math.min(((user.totalStorageUsed ?? 0) / (user.storageQuota ?? 100 * 1024 * 1024)) * 100, 100)}%`,
+      background: ((user.totalStorageUsed ?? 0) / (user.storageQuota ?? 100 * 1024 * 1024)) > 0.9
+        ? '#dc2626'
+        : ((user.totalStorageUsed ?? 0) / (user.storageQuota ?? 100 * 1024 * 1024)) > 0.7
+        ? '#f59e0b'
+        : '#111827'
+    }} />
+  </div>
+  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+    <span style={{ fontSize: 11, color: '#9ca3af' }}>
+      {files.length} of {process.env.NEXT_PUBLIC_MAX_FILES ?? 20} files used
+    </span>
+    <span style={{ fontSize: 11, color: '#9ca3af' }}>
+      {Math.round(((user.totalStorageUsed ?? 0) / (user.storageQuota ?? 100 * 1024 * 1024)) * 100)}% used
+    </span>
+  </div>
+</div>
+
         {/* Files table */}
         <div style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 16, overflow: 'hidden'}}>
           <div style={{ padding: '20px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
