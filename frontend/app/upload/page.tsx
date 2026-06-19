@@ -213,7 +213,7 @@ export default function UploadPage() {
                   <p style={{ fontSize: 15, fontWeight: 600, color: '#111827', marginBottom: 4 }}>
                     {isDragActive ? 'Drop it here' : 'Drop a file or click to browse'}
                   </p>
-                  <p style={{ fontSize: 13, color: '#9ca3af' }}>Any file type up to 100 MB</p>
+                  <p style={{ fontSize: 13, color: '#9ca3af' }}>Any file type up to 10 MB</p>
                 </div>
               )}
             </div>
