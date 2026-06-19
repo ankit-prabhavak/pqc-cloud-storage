@@ -303,15 +303,20 @@ export const logout = async (req, res, next) => {
 
 // GET /api/auth/me
 export const getMe = async (req, res) => {
+  const user = await User.findById(req.user._id)
   res.json({
     user: {
-      id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      isVerified: req.user.isVerified,
-    },
-  });
-};
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isVerified: user.isVerified,
+      encryptionPreference: user.encryptionPreference,
+      totalStorageUsed: user.totalStorageUsed,
+      storageQuota: user.storageQuota || 100 * 1024 * 1024,
+      totalFilesUploaded: user.totalFilesUploaded
+    }
+  })
+}
 
 // PUT /api/auth/change-password
 export const changePassword = async (req, res, next) => {

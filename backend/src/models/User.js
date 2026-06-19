@@ -79,6 +79,10 @@ const userSchema = new mongoose.Schema({
   totalStorageUsed: {
     type: Number,
     default: 0  // in bytes
+  },
+  storageQuota: {
+    type: Number,
+    default: 100 * 1024 * 1024  // 100MB default quota
   }
 }, { timestamps: true })
 

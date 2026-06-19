@@ -6,6 +6,7 @@ export interface User {
   encryptionPreference: 'aes-only' | 'hybrid'
   totalFilesUploaded: number
   totalStorageUsed: number
+  storageQuota: number        // ADD THIS
 }
 
 export interface FileItem {
