@@ -202,7 +202,7 @@ export const login = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email }).select(
-      "+password +refreshToken",
+      "+password +refreshToken name email isVerified isActive encryptionPreference totalStorageUsed storageQuota totalFilesUploaded",
     );
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -240,7 +240,15 @@ export const login = async (req, res, next) => {
     res.json({
       message: "Login successful",
       accessToken,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        encryptionPreference: user.encryptionPreference,
+        totalStorageUsed: user.totalStorageUsed ?? 0,
+        storageQuota: user.storageQuota ?? 100 * 1024 * 1024,
+        totalFilesUploaded: user.totalFilesUploaded ?? 0,
+      },
     });
   } catch (error) {
     next(error);
@@ -303,7 +311,7 @@ export const logout = async (req, res, next) => {
 
 // GET /api/auth/me
 export const getMe = async (req, res) => {
-  const user = await User.findById(req.user._id)
+  const user = await User.findById(req.user._id);
   res.json({
     user: {
       id: user._id,
@@ -313,10 +321,10 @@ export const getMe = async (req, res) => {
       encryptionPreference: user.encryptionPreference,
       totalStorageUsed: user.totalStorageUsed,
       storageQuota: user.storageQuota || 100 * 1024 * 1024,
-      totalFilesUploaded: user.totalFilesUploaded
-    }
-  })
-}
+      totalFilesUploaded: user.totalFilesUploaded,
+    },
+  });
+};
 
 // PUT /api/auth/change-password
 export const changePassword = async (req, res, next) => {
