@@ -1,282 +1,129 @@
 # Contributing to PQC Cloud Storage
 
-This document explains how to work on this project as a team. Read it fully before writing any code.
+This guide outlines our team's workflow and coding standards. Read it before writing or pushing any code.
 
 ---
 
-## First time setup
+## First Time Setup
 
-### Step 1 — Clone the repo
+### 1. Clone & Branch Setup
 
 ```bash
 git clone https://github.com/ankit-prabhavak/pqc-cloud-storage.git
 cd pqc-cloud-storage
-```
 
-### Step 2 — Switch to dev branch
-
-```bash
+# Switch to the shared development branch
 git checkout dev
 git pull origin dev
+
+# Create and switch to your feature branch
+git checkout -b feature/your-feature-name
+
 ```
 
-### Step 3 — Switch to your feature branch
+### 2. Service Initialization
 
-```bash
-git checkout feature/your-branch-name
-```
-
-### Step 4 — Set up your service
-
-**Frontend:**
+* **Frontend (Next.js):**
 ```bash
 cd frontend
 npm install
-cp ../.env.example .env.local
+cp .env.example .env.local
 npm run dev
+
 ```
 
-**Backend:**
+
+* **Backend (Node.js/Express):**
 ```bash
 cd backend
 npm install
-cp ../.env.example .env
+cp .env.example .env
 npm run dev
+
 ```
 
-**Crypto service:**
-```bash
-cd crypto-service
-python -m venv venv
-venv\Scripts\activate        # Windows
-source venv/bin/activate     # Mac / Linux
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
 
-### Step 5 — Fill in your .env
 
-Copy `.env.example` and fill in values. Ask Ankit for shared credentials like MongoDB URI and R2 keys.
-
-Never commit a `.env` file with real credentials. It is in `.gitignore` for this reason.
+> **Note on Credentials:** Fill out your local `.env` files. Ask Ankit for shared development credentials (MongoDB URI, Cloudflare R2 keys). **Never commit active credentials to GitHub.**
 
 ---
 
-## Daily workflow
+## Daily Git Workflow
 
-Follow this every single day before you start working.
+Always sync with the main development track before making or submitting changes.
 
 ```bash
-# 1. go to dev and pull latest
+# 1. Sync local dev branch with remote
 git checkout dev
 git pull origin dev
 
-# 2. go to your branch
-git checkout feature/your-branch-name
-
-# 3. bring your branch up to date with dev
+# 2. Rebase/Merge changes into your feature branch
+git checkout feature/your-feature-name
 git merge dev
 
-# 4. write your code
-
-# 5. stage and commit
+# 3. Code, then stage and commit your changes
 git add .
-git commit -m "type: short description of what you did"
+git commit -m "type: short description"
 
-# 6. push your branch
-git push origin feature/your-branch-name
+# 4. Push branch to GitHub
+git push origin feature/your-feature-name
+
 ```
 
-When your feature is ready, open a Pull Request on GitHub from your branch into `dev`. Do not merge it yourself — Merging requires review
+*When your feature is complete, open a **Pull Request (PR)** from your branch into `dev` on GitHub. Do not merge it yourself; code reviews are mandatory.*
 
 ---
 
-## Commit message format
+## Commit & Branch Rules
 
-Every commit message must follow this format:
+### Commit Format
 
-```text
-type: short description in lowercase
-```
+Messages must look like: `type: lowercase description`.
 
-| Type | When to use |
-|------|-------------|
-| `feat` | adding new functionality |
-| `fix` | fixing a bug |
-| `chore` | config, dependencies, setup |
-| `docs` | updating documentation |
-| `refactor` | restructuring code without changing behavior |
-| `style` | formatting, spacing, no logic changes |
+* `feat`: New user-facing functionality
+* `fix`: Security patch or bug fix
+* `chore`: Build steps, dependencies, or configuration updates
+* `docs`: Editing documentation or code comments
+* `refactor`: Changing code layout without altering functionality
 
-Examples of good commit messages:
+*Good:* `feat: add client-side web crypto key generation`
 
-```text
-feat: add JWT middleware to protect routes
-fix: correct AES decryption returning empty buffer
-chore: update requirements.txt with pydantic version
-docs: add endpoint descriptions to README
-refactor: move file upload logic into controller
-```
+*Bad:* `fixed stuff` / `working now`
 
-Examples of bad commit messages:
+### Branch Guidelines
 
-```text
-update
-fixed stuff
-working now
-asdfjkl
-```
-
-Bad commit messages will be asked to be rewritten before the PR is merged.
+* Never push directly to `main` or `dev`.
+* Address all PR review feedback before requesting a final merge.
+* Resolve merge conflicts locally in VS Code by comparing `HEAD` against `dev`, cleaning up conflict markers, and committing the resolution.
 
 ---
 
-## Pull Request rules
+## Clean Code Conventions
 
-When you open a Pull Request:
+### JavaScript / TypeScript (Next.js & Node.js)
 
-- All changes must be made through a Pull Request
-- Do not push directly to protected branches
-- PR title should clearly describe the change
-- Add a short description explaining what was done and why
-- Ensure your branch is up to date with `dev` before opening a PR
-- At least one review is required before merging
-- Address all review comments before merging
-
-Once the required review is completed, the PR can be merged.
+* **Variables:** Use `const` by default; use `let` only if reassignment is explicitly required.
+* **Asynchronous Patterns:** Always use `async/await` syntax instead of old `.then()` promise chains.
+* **Error Handling:** Wrap all asynchronous operations and API network calls in clear `try/catch` statements.
+* **Clarity:** Write descriptive variable and method titles (`encryptFileBuffer` over `ef`). Functions should focus on a single job.
 
 ---
 
-## Branch rules
-
-- Never push directly to `main`
-- Never push directly to `dev`
-- Always work on your own feature branch
-- Open a Pull Request to merge changes into dev
-- Merge dev into main only when the project is stable
-
----
-
-## Resolving merge conflicts
-
-If you get a merge conflict after running `git merge dev`:
-
-1. Open VS Code — conflicting files will be highlighted
-2. Look for sections marked `<<<<<<< HEAD` and `>>>>>>> dev`
-3. Decide which version to keep, or combine both manually
-4. Save the file
-5. Run:
-
-```bash
-git add .
-git commit -m "fix: resolve merge conflict with dev"
-git push origin feature/your-branch-name
-```
-
-If you are unsure how to resolve a conflict, do not guess. Discuss with team.
-
----
-
-## Code style rules
-
-### JavaScript and TypeScript
-
-- Use `const` by default, `let` only when you need to reassign
-- Use `async/await` not `.then()` chains
-- Always handle errors with `try/catch` in async functions
-- Name variables and functions clearly — `encryptFile` not `ef`
-- One function does one thing
-
-```js
-// good
-const encryptFile = async (fileBuffer, encryptionType) => {
-  try {
-    const response = await cryptoService.encrypt(fileBuffer, encryptionType)
-    return response.data
-  } catch (error) {
-    throw new Error(`Encryption failed: ${error.message}`)
-  }
-}
-
-// bad
-const ef = async (f, t) => {
-  const r = await axios.post('/encrypt', { f, t })
-  return r
-}
-```
-
-### Python
-
-- Follow PEP 8 — 4 spaces for indentation
-- Type hints on all function parameters and return values
-- Keep functions small and single-purpose
-
-```python
-# good
-def encrypt_file(data: bytes, key: bytes) -> tuple:
-    iv = os.urandom(12)
-    aesgcm = AESGCM(key)
-    encrypted = aesgcm.encrypt(iv, data, None)
-    return encrypted, iv
-
-# bad
-def enc(d, k):
-    i = os.urandom(12)
-    return AESGCM(k).encrypt(i, d, None), i
-```
-
----
-
-## What not to commit
-
-The `.gitignore` already handles most of this, but be aware:
-
-- Never commit `.env` files with real credentials
-- Never commit `node_modules/`
-- Never commit `venv/` or `__pycache__/`
-- Never commit `.next/` build output
-- Never commit API keys, secrets, or passwords anywhere in the code
-
-If you accidentally commit a secret, tell Ankit immediately so it can be rotated.
-
----
-
-## Project structure reminder
+## Repository Architecture
 
 ```text
 pqc-cloud-storage/
-├── frontend/          Member 3 and Member 4
-├── backend/           Member 1 and Member 2 and Member 6
-├── crypto-service/    Member 5
-├── .env.example       source of truth for environment variables
-└── CONTRIBUTING.md    this file
+├── frontend/        # Next.js UI + Web Crypto API (Browser Cryptography)
+├── backend/         # Node.js Express API (Routing, Metadata, R2 Orchestration)
+├── .env.example     # Environment variable template
+└── CONTRIBUTING.md  # This document
+
 ```
 
-Only touch files inside your own service unless you have discussed it with team first. Crossing into another person's service without coordination causes conflicts and confusion.
-
 ---
 
-## Communication
+## Team Communication
 
-- If you are blocked for more than 30 minutes, ask in the group chat
-- If you are going to miss a deadline, say so early
-- If you break something on dev, tell the team immediately
-- Discuss changes affecting multiple parts before implementation
-
----
-
-## Phase completion checklist
-
-Before merging `dev` into `main` at the end of a phase, every member must confirm:
-
-- My feature works end to end
-- I have tested it manually
-- My branch is merged into dev
-- No console errors or unhandled exceptions
-- No hardcoded credentials in my code
-
----
-
-## Questions
-
-If anything in this document is unclear, ask team before making assumptions.
+* **30-Minute Rule:** If you are stuck or blocked on a bug for more than 30 minutes, raise a flag in the team group chat.
+* **Transparency:** If you break a component on the shared `dev` branch, notify the team immediately so it can be rolled back or patched.
+* **Cross-Over:** Coordinate with team members before refactoring files outside your assigned module to prevent logical conflicts.
