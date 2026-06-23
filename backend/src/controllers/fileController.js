@@ -71,170 +71,125 @@ const callCryptoDecrypt = async (
 // ─── POST /api/files/upload ───────────────────────────────────────────────────
 export const uploadFile = async (req, res, next) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file provided" });
+    // new flow — browser sends pre-encrypted data as JSON
+    // no file buffer, no crypto service call
+    const {
+      encryptedFile,   // base64 encrypted bytes
+      mlkemCiphertext, // base64 ML-KEM ciphertext + wrapped AES key
+      iv,
+      tag,
+      encryptionType,
+      originalName,
+      fileSize,
+      mimeType,
+      downloadLimit,
+      expiresAt,
+      tags
+    } = req.body
+
+    if (!encryptedFile || !mlkemCiphertext || !iv || !tag || !originalName) {
+      return res.status(400).json({ message: 'Missing required encryption fields' })
     }
 
-    const fileBuffer = req.file.buffer;
-    const originalName = req.file.originalname;
-    const mimeType = req.file.mimetype;
-    const fileSize = req.file.size;
+    const parsedFileSize = parseInt(fileSize) || 0
 
-    // ── QUOTA AND LIMIT CHECKS ────────────────────────────────────────────────────
+    // ── QUOTA AND LIMIT CHECKS ────────────────────────────────────────────────
 
-    const MAX_STORAGE_PER_USER =
-      parseInt(process.env.MAX_STORAGE_PER_USER_MB || "100") * 1024 * 1024;
-    const MAX_FILES_PER_USER = parseInt(process.env.MAX_FILES_PER_USER || "20");
-    const MAX_FILE_SIZE =
-      parseInt(process.env.MAX_FILE_SIZE_MB || "10") * 1024 * 1024;
+    const MAX_STORAGE_PER_USER = parseInt(process.env.MAX_STORAGE_PER_USER_MB || '100') * 1024 * 1024
+    const MAX_FILES_PER_USER = parseInt(process.env.MAX_FILES_PER_USER || '20')
+    const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE_MB || '10') * 1024 * 1024
 
-    // File size check
-    if (fileSize > MAX_FILE_SIZE) {
+    if (parsedFileSize > MAX_FILE_SIZE) {
       return res.status(400).json({
-        message: `File too large. Maximum size is ${process.env.MAX_FILE_SIZE_MB || "10"}MB.`,
-      });
+        message: `File too large. Maximum size is ${process.env.MAX_FILE_SIZE_MB || '10'}MB.`
+      })
     }
 
-    // Storage quota check
-    const currentUser = await User.findById(req.user._id);
-    if (currentUser.totalStorageUsed + fileSize > MAX_STORAGE_PER_USER) {
+    const currentUser = await User.findById(req.user._id)
+    if (currentUser.totalStorageUsed + parsedFileSize > MAX_STORAGE_PER_USER) {
       return res.status(403).json({
-        message: "Storage quota exceeded.",
+        message: 'Storage quota exceeded.',
         used: currentUser.totalStorageUsed,
         limit: MAX_STORAGE_PER_USER,
-        hint: "Delete some files to free up space.",
-      });
+        hint: 'Delete some files to free up space.'
+      })
     }
 
-    // File count check
-    const fileCount = await File.countDocuments({
-      userId: req.user._id,
-      isDeleted: false,
-    });
-
+    const fileCount = await File.countDocuments({ userId: req.user._id, isDeleted: false })
     if (fileCount >= MAX_FILES_PER_USER) {
       return res.status(403).json({
         message: `File limit reached. Maximum ${MAX_FILES_PER_USER} files per account.`,
-        hint: "Delete existing files to upload new ones.",
-      });
+        hint: 'Delete existing files to upload new ones.'
+      })
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────
+    // ── upload encrypted bytes to R2 ─────────────────────────────────────────
 
-    const encryptionType =
-      req.body.encryptionType || req.user.encryptionPreference || "hybrid";
+    const encryptedBuffer = Buffer.from(encryptedFile, 'base64')
+    const fileHash = generateFileHash(encryptedBuffer)
+    const storageKey = `${req.user._id}/${uuidv4()}`
 
-    // Step 1 — encrypt the file
-    let encrypted_file, aes_key_encrypted, iv, tag, cryptoEncryptionType;
-
-    try {
-      const cryptoRes = await callCryptoEncrypt(
-        fileBuffer,
-        originalName,
-        encryptionType,
-      );
-      encrypted_file = cryptoRes.encrypted_file;
-      aes_key_encrypted = cryptoRes.aes_key_encrypted;
-      iv = cryptoRes.iv;
-      tag = cryptoRes.tag;
-      cryptoEncryptionType = cryptoRes.encryption_type;
-
-      console.log(
-        `[CRYPTO] File encrypted — type: ${cryptoEncryptionType}, original: ${cryptoRes.original_size}B, encrypted: ${cryptoRes.encrypted_size}B`,
-      );
-
-      // Zero plaintext buffer immediately after encryption
-      fileBuffer.fill(0); // security best practice
-
-    } catch (cryptoError) {
-      console.error("[CRYPTO] Service unavailable:", cryptoError.message);
-      return res.status(503).json({
-        message:
-          "Crypto service unavailable. Please start the Python service on port 8000.",
-        hint: "cd crypto-service && uvicorn main:app --reload --port 8000",
-      });
-    }
-
-    // Step 2 — convert base64 to buffer and hash it
-    const encryptedBuffer = Buffer.from(encrypted_file, "base64");
-    const fileHash = generateFileHash(encryptedBuffer);
-
-    // Step 3 — upload to R2
-    const storageKey = `${req.user._id}/${uuidv4()}`;
-
-    if (
-      process.env.R2_BUCKET_NAME &&
-      process.env.R2_BUCKET_NAME !== "pqc-files-placeholder"
-    ) {
-      await r2Client.send(
-        new PutObjectCommand({
-          Bucket: BUCKET,
-          Key: storageKey,
-          Body: encryptedBuffer,
-          ContentType: "application/octet-stream",
-        }),
-      );
+    if (process.env.R2_BUCKET_NAME && process.env.R2_BUCKET_NAME !== 'pqc-files-placeholder') {
+      await r2Client.send(new PutObjectCommand({
+        Bucket: BUCKET,
+        Key: storageKey,
+        Body: encryptedBuffer,
+        ContentType: 'application/octet-stream'
+      }))
     } else {
-      console.log(`[R2 SKIP] R2 not configured — skipping cloud storage`);
+      console.log('[R2 SKIP] R2 not configured')
     }
 
-    // Step 4 — save metadata to MongoDB
-    const { downloadLimit, expiresAt, tags } = req.body;
+    // ── save metadata to MongoDB ──────────────────────────────────────────────
 
     const file = await File.create({
       userId: req.user._id,
       fileName: uuidv4(),
       originalName,
       cloudUrl: storageKey,
-      encryptionType: cryptoEncryptionType,
-      encryptedAESKey: aes_key_encrypted,
+      encryptionType: encryptionType || 'hybrid',
+      encryptedAESKey: mlkemCiphertext,  // storing mlkemCiphertext in existing field
       iv,
       tag,
       fileHash,
-      fileSize,
-      mimeType,
+      fileSize: parsedFileSize,
+      mimeType: mimeType || 'application/octet-stream',
       downloadLimit: downloadLimit ? parseInt(downloadLimit) : null,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
-      tags: tags ? JSON.parse(tags) : [],
-    });
+      tags: tags ? JSON.parse(tags) : []
+    })
 
-    // Step 5 — create version record
     await FileVersion.create({
       fileId: file._id,
       userId: req.user._id,
       versionNumber: 1,
       cloudUrl: storageKey,
-      encryptedAESKey: aes_key_encrypted,
+      encryptedAESKey: mlkemCiphertext,
       iv,
       tag,
       fileHash,
-      fileSize,
-      encryptionType: cryptoEncryptionType,
-    });
+      fileSize: parsedFileSize,
+      encryptionType: encryptionType || 'hybrid'
+    })
 
-    // Step 6 — update user stats
     await User.findByIdAndUpdate(req.user._id, {
-      $inc: { totalFilesUploaded: 1, totalStorageUsed: fileSize },
-    });
+      $inc: { totalFilesUploaded: 1, totalStorageUsed: parsedFileSize }
+    })
 
-    // Step 7 — audit log
     await AuditLog.create({
       userId: req.user._id,
       fileId: file._id,
-      action: "upload",
+      action: 'upload',
       ipAddress: req.ip,
-      metadata: {
-        originalName,
-        fileSize,
-        encryptionType: cryptoEncryptionType,
-        fileHash,
-      },
-    });
+      metadata: { originalName, fileSize: parsedFileSize, encryptionType, fileHash }
+    })
 
-    const securityScore = calculateSecurityScore(file);
+    const securityScore = calculateSecurityScore(file)
+
+    console.log(`[CLIENT-CRYPTO] File uploaded — client-side encrypted, type: ${encryptionType}`)
 
     res.status(201).json({
-      message: "File uploaded and encrypted successfully",
+      message: 'File uploaded and encrypted successfully',
       file: {
         id: file._id,
         originalName: file.originalName,
@@ -243,13 +198,15 @@ export const uploadFile = async (req, res, next) => {
         encryptionType: file.encryptionType,
         fileHash,
         securityScore,
-        createdAt: file.createdAt,
-      },
-    });
+        createdAt: file.createdAt
+      }
+    })
   } catch (error) {
-    next(error);
+    console.error('[UPLOAD ERROR]', error.message)
+    console.error('[UPLOAD ERROR] Stack:', error.stack)
+    next(error)
   }
-};
+}
 
 // ─── GET /api/files ───────────────────────────────────────────────────────────
 export const getFiles = async (req, res, next) => {
@@ -306,83 +263,51 @@ export const downloadFile = async (req, res, next) => {
     const file = await File.findOne({
       _id: req.params.id,
       userId: req.user._id,
-      isDeleted: false,
-    });
+      isDeleted: false
+    })
 
     if (!file) {
-      return res.status(404).json({ message: "File not found" });
+      return res.status(404).json({ message: 'File not found' })
     }
 
-    if (
-      file.downloadLimit !== null &&
-      file.downloadCount >= file.downloadLimit
-    ) {
-      return res.status(403).json({ message: "Download limit reached" });
+    if (file.downloadLimit !== null && file.downloadCount >= file.downloadLimit) {
+      return res.status(403).json({ message: 'Download limit reached' })
     }
 
-    // R2 se encrypted file fetch karo
-    const command = new GetObjectCommand({
-      Bucket: BUCKET,
-      Key: file.cloudUrl,
-    });
-    const r2Response = await r2Client.send(command);
+    // fetch encrypted bytes from R2
+    const command = new GetObjectCommand({ Bucket: BUCKET, Key: file.cloudUrl })
+    const r2Response = await r2Client.send(command)
 
-    const chunks = [];
-    for await (const chunk of r2Response.Body) chunks.push(chunk);
-    const encryptedBuffer = Buffer.concat(chunks);
+    const chunks = []
+    for await (const chunk of r2Response.Body) chunks.push(chunk)
+    const encryptedBuffer = Buffer.concat(chunks)
 
-    // Crypto service se decrypt karo
-    let decryptedBuffer;
-    try {
-      decryptedBuffer = await callCryptoDecrypt(
-        encryptedBuffer.toString("base64"),
-        file.encryptedAESKey,
-        file.iv,
-        file.tag,
-        file.encryptionType,
-      );
-      console.log(
-        `[CRYPTO] File decrypted — ${file.originalName}, ${decryptedBuffer.length}B`,
-      );
-    } catch (cryptoError) {
-      console.error("[CRYPTO] Decrypt failed:", cryptoError.message);
-
-      // Agar crypto service down hai toh presigned URL fallback
-      if (cryptoError.code === "ECONNREFUSED") {
-        return res.status(503).json({
-          message: "Crypto service unavailable for decryption",
-          hint: "cd crypto-service && uvicorn main:app --reload --port 8000",
-        });
-      }
-
-      return res.status(400).json({
-        message: "Decryption failed — file may have been tampered with",
-      });
-    }
-
-    file.downloadCount += 1;
-    await file.save();
+    file.downloadCount += 1
+    await file.save()
 
     await AuditLog.create({
       userId: req.user._id,
       fileId: file._id,
-      action: "download",
+      action: 'download',
       ipAddress: req.ip,
-      metadata: { originalName: file.originalName, fileSize: file.fileSize },
-    });
+      metadata: { originalName: file.originalName, fileSize: file.fileSize }
+    })
 
-    // Decrypted file seedha response mein bhejo
-    res.set({
-      "Content-Type": file.mimeType || "application/octet-stream",
-      "Content-Disposition": `attachment; filename="${file.originalName}"`,
-      "Content-Length": decryptedBuffer.length,
-    });
+    // send encrypted data to browser — browser decrypts using ML-KEM private key
+    res.json({
+      encryptedFile: encryptedBuffer.toString('base64'),
+      mlkemCiphertext: file.encryptedAESKey,
+      iv: file.iv,
+      tag: file.tag,
+      encryptionType: file.encryptionType,
+      originalName: file.originalName,
+      mimeType: file.mimeType || 'application/octet-stream'
+    })
 
-    res.send(decryptedBuffer);
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
 // ─── DELETE /api/files/:id ────────────────────────────────────────────────────
 export const deleteFile = async (req, res, next) => {

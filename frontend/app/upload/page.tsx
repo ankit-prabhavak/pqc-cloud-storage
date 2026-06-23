@@ -11,6 +11,8 @@ import {
 } from 'react-icons/fi'
 
 import Navbar from '@/components/ui/Navbar'
+import { encryptFile } from '@/lib/crypto'
+import { useAuth } from '@/context/AuthContext'
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return '0 B'
@@ -47,42 +49,59 @@ export default function UploadPage() {
     onDropRejected: () => setError('File too large. Maximum size is 100MB.')
   })
 
-  const handleUpload = async () => {
-    if (!file) return
-    setError('')
-    setUploading(true)
-    setProgress(0)
+  const { keypair } = useAuth()
 
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('encryptionType', encryptionType)
-    if (downloadLimit) formData.append('downloadLimit', downloadLimit)
+  const handleUpload = async () => {
+  if (!file) return
+  if (!keypair) {
+    setError('Encryption keys not available. Please log out and log in again.')
+    return
+  }
+
+  setError('')
+  setUploading(true)
+  setProgress(0)
+
+  try {
+    // Step 1 — encrypt in browser
+    setProgress(15)
+    const payload = await encryptFile(file, keypair.publicKey, encryptionType)
+    setProgress(40)
+
+    // Step 2 — build form data with encrypted payload
+    const body: any = {
+      encryptedFile: payload.encryptedFile,
+      mlkemCiphertext: payload.mlkemCiphertext,
+      iv: payload.iv,
+      tag: payload.tag,
+      encryptionType: payload.encryptionType,
+      originalName: file.name,
+      fileSize: String(file.size),
+      mimeType: file.type || 'application/octet-stream'
+    }
+
+    if (downloadLimit) body.downloadLimit = downloadLimit
     if (expiresIn) {
       const expiresAt = new Date(Date.now() + parseInt(expiresIn) * 60 * 60 * 1000)
-      formData.append('expiresAt', expiresAt.toISOString())
+      body.expiresAt = expiresAt.toISOString()
     }
 
-    try {
-      // Simulate progress since axios upload progress needs special config
-      const interval = setInterval(() => {
-        setProgress(p => Math.min(p + 8, 85))
-      }, 300)
+    setProgress(60)
 
-      const res = await api.post('/files/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+    // Step 3 — upload to backend
+    const res = await api.post('/files/upload', body)
 
-      clearInterval(interval)
-      setProgress(100)
-      setResult(res.data.file)
-      setDone(true)
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Upload failed. Make sure the backend and crypto service are running.')
-      setProgress(0)
-    } finally {
-      setUploading(false)
-    }
+    setProgress(100)
+    setResult(res.data.file)
+    setDone(true)
+
+  } catch (err: any) {
+    setError(err.response?.data?.message || 'Upload failed.')
+    setProgress(0)
+  } finally {
+    setUploading(false)
   }
+}
 
   return (
     <div style={{ minHeight: '100vh', background: '#fafafa', fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
@@ -323,7 +342,7 @@ export default function UploadPage() {
               <div style={{ background: '#fff', border: '1px solid #f0f0f0', borderRadius: 12, padding: '16px 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                   <span style={{ fontSize: 13, fontWeight: 500, color: '#374151' }}>
-                    {progress < 40 ? 'Encrypting file...' : progress < 80 ? 'Uploading to R2...' : progress < 100 ? 'Saving metadata...' : 'Complete'}
+                    {progress < 40 ? 'Encrypting in browser...' : progress < 80 ? 'Uploading to R2...' : progress < 100 ? 'Saving metadata...' : 'Complete'}
                   </span>
                   <span style={{ fontSize: 13, fontWeight: 600, color: '#111827', fontFamily: 'DM Mono, monospace' }}>{progress}%</span>
                 </div>

@@ -1,38 +1,37 @@
 # ============================================
 # Docker Compose - PQC Cloud Storage
 # ============================================
-# STATUS: Work in progress
-# Phase 1 → manual local development (3 terminals)
-# Phase 2 → core features complete
-# Phase 3 → uncomment and use this file for team sync
+# Two services: frontend (Next.js) + backend (Express)
+# Cryptography runs in the browser.
+# MongoDB is external (MongoDB Atlas). R2 is Cloudflare managed.
+#
+# Usage:
+#   docker compose up --build          # start both services
+#   docker compose up frontend         # frontend only
+#   docker compose up backend          # backend only
+#   docker compose down                # stop and remove containers
 # ============================================
 
-# TODO: uncomment in Phase 3
-
-# version: '3.8'
 # services:
+
 #   frontend:
-#     build: ./frontend
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
 #     ports:
 #       - "3000:3000"
+#     environment:
+#       - NEXT_PUBLIC_API_URL=http://localhost:5000/api
+#     depends_on:
+#       - backend
+#     restart: unless-stopped
 
 #   backend:
-#     build: ./backend
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
 #     ports:
 #       - "5000:5000"
-#     env_file: .env
-
-#   crypto-service:
-#     build: ./crypto-service
-#     ports:
-#       - "8000:8000"
-
-#   mongodb:
-#     image: mongo:7
-#     ports:
-#       - "27017:27017"
-#     volumes:
-#       - mongo_data:/data/db
-
-# volumes:
-#   mongo_data:
+#     env_file:
+#       - ./backend/.env
+#     restart: unless-stopped

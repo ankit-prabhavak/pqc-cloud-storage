@@ -23,17 +23,19 @@ const upload = multer({
 })
 
 // Public route — no auth
-router.get('/shared/:token', accessSharedFile)
+// router.get('/shared/:token', accessSharedFile)
 
 // All routes below require login
 router.use(protect)
 
 router.get('/stats', getStats)
 router.get('/logs', getLogs)
-router.post('/upload', uploadLimiter, upload.single('file'), uploadFile)
+// router.post('/upload', uploadLimiter, upload.single('file'), uploadFile)
 router.get('/', getFiles)
 router.get('/download/:id', downloadLimiter, downloadFile)  // download limiter added
 router.delete('/:id', deleteFile)
-router.post('/share/:id', shareFile)
+// router.post('/share/:id', shareFile)
+// remove multer from upload route — no longer needed for main upload
+router.post('/upload', uploadLimiter, uploadFile)
 
 export default router
