@@ -1,5 +1,7 @@
 "use client";
-
+import Lenis from 'lenis';
+import { useEffect } from 'react';
+import 'lenis/dist/lenis.css'
 import { useRouter } from "next/navigation";
 import {
   FiShield,
@@ -24,7 +26,15 @@ import { Cpu, ShieldCheck, Fingerprint, TimerOff, EyeOff } from "lucide-react";
 
 export default function LandingPage() {
   const router = useRouter();
-
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+    });
+   
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
   return (
     <main
       className="min-h-screen bg-white text-gray-900 overflow-x-hidden"
