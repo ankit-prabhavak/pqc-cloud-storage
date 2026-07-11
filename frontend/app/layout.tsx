@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Fraunces, Geist, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/context/AuthContext'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
-const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', display: 'swap' })
+const geist = Geist({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })
 
 export const metadata: Metadata = {
   title: 'PQC Cloud Storage',
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} ${geistMono.variable} antialiased bg-gray-950 text-white`}>
+      <body className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable} antialiased bg-[#0B0A0C] text-[#F5F1EE]`}>
         <AuthProvider>
           {children}
         </AuthProvider>
