@@ -20,7 +20,9 @@ import {
   FiClock,
   FiAlertCircle,
 } from "react-icons/fi";
-import Aurora from "@/components/ui/Aurora";
+import dynamic from "next/dynamic";
+// Aurora runs WebGL — must never execute server-side
+const Aurora = dynamic(() => import("@/components/ui/Aurora"), { ssr: false });
 import Navbar from "@/components/ui/Navbar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { decryptFile } from "@/lib/crypto";
