@@ -20,6 +20,7 @@ import {
   FiClock,
   FiAlertCircle,
 } from "react-icons/fi";
+import Aurora from "@/components/ui/Aurora";
 import Navbar from "@/components/ui/Navbar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { decryptFile } from "@/lib/crypto";
@@ -239,52 +240,12 @@ export default function DashboardPage() {
         .nav-link:hover { color: #111827 !important; }
       `}</style>
 
-      {/* Top navbar */}
-      {/* <nav style={{ background: '#fff', borderBottom: '1px solid #f0f0f0', padding: '0 32px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiShield size={13} color="#fff" />
-            </div>
-            <span style={{ fontWeight: 700, fontSize: 14, color: '#111827' }}>PQC Storage</span>
-          </Link>
-
-          <div style={{ display: 'flex', gap: 4 }}>
-            {[
-              { label: 'Dashboard', href: '/dashboard', active: true },
-              { label: 'Upload', href: '/upload', active: false },
-              { label: 'Security', href: '/security', active: false },
-            ].map(item => (
-              <Link key={item.href} href={item.href} className="nav-link" style={{
-                padding: '6px 12px', borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: 'none',
-                color: item.active ? '#111827' : '#6b7280',
-                background: item.active ? '#f3f4f6' : 'transparent',
-                transition: 'color 0.15s'
-              }}>
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 32, height: 32, background: '#111827', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>
-              {user.name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <span style={{ fontSize: 13, fontWeight: 500, color: '#374151' }}>{user.name}</span>
-          <button
-            onClick={logout}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', border: '1px solid #e5e7eb', borderRadius: 8, background: '#fff', cursor: 'pointer', fontSize: 13, color: '#6b7280', transition: 'all 0.15s' }}
-          >
-            <FiLogOut size={14} /> Sign out
-          </button>
-        </div>
-      </nav> */}
-
-      <Navbar />
-
+      <Aurora
+        colorStops={["#7cff67","#B497CF","#5227FF"]}
+        blend={0.68}
+        amplitude={1.0}
+        speed={1}
+      />
       {/* Page content */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 32px" }}>
         {/* Header */}
