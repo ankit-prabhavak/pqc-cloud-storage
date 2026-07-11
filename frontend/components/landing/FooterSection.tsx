@@ -25,15 +25,18 @@ export default function FooterSection() {
                 {
                   icon: FiGithub,
                   href: "https://github.com/ankit-prabhavak/pqc-cloud-storage",
+                  label: "GitHub Repository",
                 },
-                { icon: FiTwitter, href: "#" },
-                { icon: FiLinkedin, href: "#" },
+                { icon: FiTwitter, href: "#", label: "Twitter Profile" },
+                { icon: FiLinkedin, href: "#", label: "LinkedIn Profile" },
               ].map((s, i) => (
                 <a
                   key={i}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={s.label}
+                  title={s.label}
                   className="width-[34px] h-[34px] rounded-lg border border-border flex items-center justify-center text-text-muted hover:border-burgundy hover:text-text transition-colors"
                   style={{ width: '34px', height: '34px' }}
                 >

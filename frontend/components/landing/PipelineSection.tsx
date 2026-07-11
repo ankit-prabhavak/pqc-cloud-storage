@@ -1,31 +1,43 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { FiUpload, FiLock, FiKey, FiDatabase } from 'react-icons/fi'
+import { FiUpload, FiLock, FiKey, FiDatabase, FiShield, FiServer } from 'react-icons/fi'
 
 const steps = [
   {
     num: "01",
-    title: "You upload",
-    desc: "Select any file. We accept any file type up to 100 MB. Nothing is transmitted yet.",
+    title: "You drop a file",
+    desc: "Nothing is sent yet, this happens entirely in your browser.",
     icon: FiUpload,
   },
   {
     num: "02",
-    title: "AES-256 encrypts",
-    desc: "A fresh 256-bit key is generated. Your file is encrypted in-browser using AES-256-GCM with an auth tag.",
-    icon: FiLock,
-  },
-  {
-    num: "03",
-    title: "ML-KEM wraps key",
-    desc: "The AES key is encapsulated with ML-KEM. The raw key never touches the server.",
+    title: "Key generation",
+    desc: "A fresh AES-256 key and IV are generated locally.",
     icon: FiKey,
   },
   {
+    num: "03",
+    title: "On-device encryption",
+    desc: "Your file is encrypted on-device with AES-256-GCM before any network call.",
+    icon: FiLock,
+  },
+  {
     num: "04",
-    title: "Stored securely",
-    desc: "The encrypted file and the wrapped key are stored separately. Even a full server compromise yields nothing readable.",
+    title: "Post-quantum encapsulation",
+    desc: "Your ML-KEM-768 public key wraps that AES key client-side.",
+    icon: FiShield,
+  },
+  {
+    num: "05",
+    title: "Secure transmission",
+    desc: "Only ciphertext and the wrapped key travel over the network, TLS-protected.",
+    icon: FiServer,
+  },
+  {
+    num: "06",
+    title: "Finalized storage",
+    desc: "The file lands in storage and the key envelope in the database, logged with SHA-256.",
     icon: FiDatabase,
   },
 ]
@@ -61,22 +73,22 @@ export default function PipelineSection() {
             Encryption pipeline
           </p>
           <h2 className="text-4xl font-bold tracking-tight text-text leading-tight mb-0 font-display">
-            4 steps. Zero trust required.
+            6 steps. Zero trust required.
           </h2>
         </div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x divide-border"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
           variants={containerVariants}
         >
-          {steps.map((step, i) => (
+          {steps.map((step) => (
             <motion.div
               key={step.num}
               variants={cardVariants}
-              className="p-8 relative flex flex-col justify-between"
+              className="card-premium p-8 relative flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center gap-3 mb-5">

@@ -59,9 +59,9 @@
   --color-burgundy-dim: var(--burgundy-dim);
 
   /* Custom Typography Tokens */
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
+  --font-display: var(--font-geist-sans);
+  --font-body: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 :root {
@@ -172,11 +172,11 @@
 }
 
 .animate-drift-1 {
-  animation: drift-1 25s ease-in-out infinite;
+  animation: drift-1 16s ease-in-out infinite;
 }
 .animate-drift-2 {
-  animation: drift-2 30s ease-in-out infinite;
+  animation: drift-2 18s ease-in-out infinite;
 }
 .animate-drift-3 {
-  animation: drift-3 20s ease-in-out infinite;
+  animation: drift-3 15s ease-in-out infinite;
 }

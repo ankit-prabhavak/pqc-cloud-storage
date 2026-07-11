@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
-import { Fraunces, Geist, JetBrains_Mono } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 import { AuthProvider } from '@/context/AuthContext'
-
-const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', display: 'swap' })
-const geist = Geist({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://pqcstorage.io'),
@@ -14,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | PQC Cloud Storage',
   },
   description:
-    'Secure cloud storage with client-side AES-256 encryption and ML-KEM post-quantum key encapsulation. Zero-knowledge cloud storage — your plaintext never leaves your device.',
+    'Experience quantum-safe file storage using client-side encryption. Protect your sensitive data with AES-256-GCM and ML-KEM-768 zero-knowledge storage.',
   keywords: [
     'post-quantum encryption',
     'client-side AES-256 encryption',
@@ -33,7 +30,7 @@ export const metadata: Metadata = {
     siteName: 'PQC Cloud Storage',
     title: 'PQC Cloud Storage — Post-Quantum Encrypted File Storage',
     description:
-      'Client-side AES-256 encryption with ML-KEM post-quantum key wrapping. Zero-knowledge cloud storage — your files are encrypted before they leave your device.',
+      'Experience quantum-safe file storage using client-side encryption. Protect your sensitive data with AES-256-GCM and ML-KEM-768 zero-knowledge storage.',
     images: [
       {
         url: '/og-image.png',
@@ -47,15 +44,15 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PQC Cloud Storage — Post-Quantum Encrypted File Storage',
     description:
-      'Client-side AES-256 + ML-KEM post-quantum encryption. Zero plaintext ever stored on our servers.',
+      'Experience quantum-safe file storage using client-side encryption. Protect your sensitive data with AES-256-GCM and ML-KEM-768 zero-knowledge storage.',
     images: ['/og-image.png'],
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable} antialiased bg-[#0B0A0C] text-[#F5F1EE]`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="antialiased bg-[#0B0A0C] text-[#F5F1EE]">
         <AuthProvider>
           {children}
         </AuthProvider>

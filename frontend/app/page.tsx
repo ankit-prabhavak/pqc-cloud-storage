@@ -12,11 +12,11 @@ import LandingJsonLd from '@/components/landing/LandingJsonLd'
 export const metadata: Metadata = {
   title: 'Post-Quantum Encrypted Cloud Storage',
   description:
-    'Store files with client-side AES-256-GCM encryption and ML-KEM post-quantum key encapsulation. Zero-knowledge cloud storage — your plaintext never reaches our servers.',
+    'Experience quantum-safe file storage using client-side encryption. Protect your sensitive data with AES-256-GCM and ML-KEM-768 zero-knowledge storage.',
   openGraph: {
     title: 'PQC Cloud Storage — Post-Quantum Encrypted File Storage',
     description:
-      'Client-side AES-256 + ML-KEM post-quantum encryption. Zero plaintext stored. NIST FIPS 203 compliant.',
+      'Experience quantum-safe file storage using client-side encryption. Protect your sensitive data with AES-256-GCM and ML-KEM-768 zero-knowledge storage.',
     url: 'https://pqcstorage.io',
   },
 }

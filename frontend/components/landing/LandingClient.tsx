@@ -262,18 +262,18 @@ export default function LandingClient() {
 
         <h1
           style={{
-            fontSize: 60,
-            fontWeight: 700,
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
+            fontSize: "clamp(3rem, 6vw, 5.5rem)",
+            fontWeight: 800,
+            lineHeight: 0.95,
+            letterSpacing: "-0.04em",
             color: "var(--text)",
             fontFamily: "var(--font-display)",
-            marginBottom: 24,
+            marginBottom: 28,
           }}
         >
-          Your files, encrypted
+          YOUR FILES, <span style={{ color: "var(--burgundy-bright)" }}>ENCRYPTED</span>
           <br />
-          <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>
+          <span style={{ fontSize: "clamp(1.8rem, 3.8vw, 3.5rem)", color: "var(--text-muted)", fontWeight: 400, display: "block", marginTop: 8 }}>
             before they leave your device.
           </span>
         </h1>
@@ -282,15 +282,14 @@ export default function LandingClient() {
           style={{
             fontSize: 18,
             color: "var(--text-muted)",
-            maxWidth: 520,
+            maxWidth: 580,
             margin: "0 auto 40px",
             lineHeight: 1.6,
             fontWeight: 400,
             fontFamily: "var(--font-body)",
           }}
         >
-          AES-256-GCM file encryption. ML-KEM key encapsulation. Built on the
-          same NIST standards that will outlast quantum computers.
+          AES-256-GCM browser encryption and ML-KEM key encapsulation. Quantum-safe by design.
         </p>
 
         <div
@@ -706,7 +705,7 @@ export default function LandingClient() {
         >
           <Image
             src="/pqc.png"
-            alt="PQC Cloud Storage platform screenshot"
+            alt="Secure file dashboard interface showing upload progress, quantum security scores, client-side encryption indicator, and file metadata list."
             fill
             className="object-cover object-center"
             sizes="(max-width: 1200px) 100vw, 1200px"
