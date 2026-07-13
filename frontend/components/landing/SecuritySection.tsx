@@ -1,8 +1,8 @@
 'use client'
 
-import { motion } from 'motion/react';
 import { FiCheck, FiFile, FiShield } from 'react-icons/fi'
 import { Cpu, ShieldCheck, Fingerprint, TimerOff, EyeOff } from 'lucide-react'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 const standards = [
   {
@@ -80,20 +80,6 @@ const scoreRows = [
   },
 ]
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 100 } },
-}
-
 export default function SecuritySection() {
   return (
     <section id="security" className="max-w-[1100px] mx-auto px-6 py-24">
@@ -109,17 +95,12 @@ export default function SecuritySection() {
             We do not use experimental or unvetted algorithms. Every primitive in this stack has been standardized by NIST — the same body that standardized AES in 2001 and published ML-KEM in August 2024.
           </p>
 
-          <motion.div
-            className="flex flex-col gap-4"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={containerVariants}
-          >
-            {standards.map((item) => (
-              <motion.div
+          <div className="flex flex-col gap-4">
+            {standards.map((item, idx) => (
+              <ScrollReveal
                 key={item.algo}
-                variants={itemVariants}
+                variant="fade-up"
+                delay={idx * 0.08}
                 className="flex items-start gap-3.5 py-2 border-b border-border/50 last:border-none"
               >
                 <div className="w-5 h-5 rounded-full bg-burgundy-dim border border-burgundy/30 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -138,9 +119,9 @@ export default function SecuritySection() {
                     {item.purpose}
                   </div>
                 </div>
-              </motion.div>
+              </ScrollReveal>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         {/* Score card */}

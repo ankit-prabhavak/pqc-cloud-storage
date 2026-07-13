@@ -69,3 +69,20 @@ export function FooterSkeleton() {
     </div>
   )
 }
+
+export function IndustriesSkeleton() {
+  return (
+    <div className="max-w-[1100px] mx-auto px-6 py-24 animate-pulse">
+      <div className="mb-14">
+        <div className="h-4 w-20 bg-border rounded mb-3" />
+        <div className="h-10 w-80 bg-border rounded mb-4" />
+      </div>
+      <div className="flex gap-6 overflow-x-auto pb-8">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="bg-surface border border-border rounded-2xl h-[360px] min-w-[320px]" style={{ flexShrink: 0 }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+

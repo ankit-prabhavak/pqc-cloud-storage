@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from 'motion/react'
 import { FiLock, FiEye, FiClock, FiKey, FiShield, FiServer } from 'react-icons/fi'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 const features = [
   {
@@ -42,25 +42,6 @@ const features = [
   },
 ]
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: 'spring', stiffness: 100, damping: 15 },
-  },
-}
-
 export default function FeaturesSection() {
   return (
     <section id="features" className="max-w-[1100px] mx-auto px-6 py-24">
@@ -76,17 +57,12 @@ export default function FeaturesSection() {
         </p>
       </div>
 
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {features.map((f, idx) => (
-          <motion.div
+          <ScrollReveal
             key={idx}
-            variants={cardVariants}
+            variant="fade-up"
+            delay={idx * 0.08}
             className="card-premium flex flex-col justify-between"
           >
             <div>
@@ -105,9 +81,9 @@ export default function FeaturesSection() {
                 {f.desc}
               </p>
             </div>
-          </motion.div>
+          </ScrollReveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   )
 }

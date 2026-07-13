@@ -180,3 +180,8 @@
 .animate-drift-3 {
   animation: drift-3 15s ease-in-out infinite;
 }
+
+/* Hide scrollbar on horizontal snap containers */
+[data-lenis-prevent]::-webkit-scrollbar {
+  display: none;
+}

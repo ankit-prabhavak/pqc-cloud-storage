@@ -25,6 +25,7 @@ import dynamic from "next/dynamic";
 const Aurora = dynamic(() => import("@/components/ui/Aurora"), { ssr: false });
 import Navbar from "@/components/ui/Navbar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import NavGradient from "@/components/ui/NavGradient";
 import { decryptFile } from "@/lib/crypto";
 
 function formatBytes(bytes: number) {
@@ -229,8 +230,8 @@ export default function DashboardPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#fafafa",
-        fontFamily: "'DM Sans', 'Inter', sans-serif",
+        background: "var(--bg)",
+        fontFamily: "var(--font-body), 'Inter', sans-serif",
       }}
     >
       <style>{`
@@ -248,7 +249,8 @@ export default function DashboardPage() {
         amplitude={1.0}
         speed={1}
       />
-      {/* Page content */}
+      {/* Page content with nav gradient */}
+      <NavGradient>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 32px" }}>
         {/* Header */}
         <div
@@ -846,6 +848,7 @@ export default function DashboardPage() {
           />
         )}
       </div>
+      </NavGradient>
     </div>
   );
 }

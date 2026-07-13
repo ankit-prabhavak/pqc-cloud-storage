@@ -1,6 +1,6 @@
 "use client";
 import Lenis from 'lenis';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'lenis/dist/lenis.css'
 import { useRouter } from "next/navigation";
 import {
@@ -11,14 +11,18 @@ import {
   FiFile,
 } from "react-icons/fi";
 import Image from "next/image";
+
 import { motion, frame, cancelFrame } from 'motion/react';
+import AuthModal, { type AuthModalMode } from '@/components/ui/AuthModal';
 import dynamic from 'next/dynamic';
 import {
   FeaturesSkeleton,
   PipelineSkeleton,
   SecuritySkeleton,
   FooterSkeleton,
+  IndustriesSkeleton,
 } from '@/components/landing/Skeletons';
+import ScrollReveal from '@/components/ui/ScrollReveal';
 
 // Lazy load below-the-fold sections
 const FeaturesSection = dynamic(() => import('@/components/landing/FeaturesSection'), {
@@ -35,6 +39,10 @@ const SecuritySection = dynamic(() => import('@/components/landing/SecuritySecti
 });
 const FooterSection = dynamic(() => import('@/components/landing/FooterSection'), {
   loading: () => <FooterSkeleton />,
+  ssr: false,
+});
+const IndustriesSection = dynamic(() => import('@/components/landing/IndustriesSection'), {
+  loading: () => <IndustriesSkeleton />,
   ssr: false,
 });
 
@@ -59,6 +67,7 @@ const cardVariants = {
 
 export default function LandingClient() {
   const router = useRouter();
+  const [authModal, setAuthModal] = useState<AuthModalMode | null>(null);
 
   useEffect(() => {
     // Sync Lenis to Framer Motion's unified rAF loop to prevent desync
@@ -188,7 +197,7 @@ export default function LandingClient() {
           <span
             style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em", fontFamily: "var(--font-display)" }}
           >
-            PQC Storage
+            MARKQC
           </span>
         </div>
 
@@ -211,14 +220,14 @@ export default function LandingClient() {
         {/* Actions */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => setAuthModal('login')}
             className="btn-secondary"
             style={{ padding: "8px 16px" }}
           >
             Sign in
           </button>
           <button
-            onClick={() => router.push("/register")}
+            onClick={() => setAuthModal('register')}
             className="btn-primary"
             style={{ padding: "8px 16px" }}
           >
@@ -244,7 +253,7 @@ export default function LandingClient() {
           <div className="absolute top-[10%] left-[10%] w-[50vw] h-[50vw] md:w-[35vw] md:h-[35vw] rounded-full bg-[radial-gradient(circle,rgba(122,31,49,0.15)_0%,transparent_70%)] blur-3xl animate-drift-1" />
           <div className="absolute top-[35%] right-[10%] w-[55vw] h-[55vw] md:w-[40vw] md:h-[40vw] rounded-full bg-[radial-gradient(circle,rgba(156,47,68,0.1)_0%,transparent_70%)] blur-3xl animate-drift-2" />
           <div className="absolute top-[5%] left-[45%] w-[45vw] h-[45vw] md:w-[30vw] md:h-[30vw] rounded-full bg-[radial-gradient(circle,rgba(61,19,28,0.25)_0%,transparent_70%)] blur-3xl animate-drift-3" />
-          
+
           <svg className="absolute inset-0 w-full h-full opacity-[0.04] stroke-[#F5F1EE]" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="cryptolattice" width="80" height="80" patternUnits="userSpaceOnUse">
@@ -271,10 +280,19 @@ export default function LandingClient() {
             marginBottom: 28,
           }}
         >
-          YOUR FILES, <span style={{ color: "var(--burgundy-bright)" }}>ENCRYPTED</span>
+          <ScrollReveal variant="text-reveal" delay={0.05} duration={0.55}>
+            YOUR FILES,
+          </ScrollReveal>{' '}
+          <span style={{ color: "var(--burgundy-bright)" }}>
+            <ScrollReveal variant="text-reveal" delay={0.2} duration={0.55}>
+              ENCRYPTED
+            </ScrollReveal>
+          </span>
           <br />
           <span style={{ fontSize: "clamp(1.8rem, 3.8vw, 3.5rem)", color: "var(--text-muted)", fontWeight: 400, display: "block", marginTop: 8 }}>
-            before they leave your device.
+            <ScrollReveal variant="text-reveal" delay={0.35} duration={0.55}>
+              before they leave your device.
+            </ScrollReveal>
           </span>
         </h1>
 
@@ -302,7 +320,7 @@ export default function LandingClient() {
           }}
         >
           <button
-            onClick={() => router.push("/register")}
+            onClick={() => setAuthModal('register')}
             className="btn-primary"
             style={{ padding: "14px 28px", fontSize: 15 }}
           >
@@ -310,7 +328,7 @@ export default function LandingClient() {
             <FiArrowRight size={15} />
           </button>
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => setAuthModal('login')}
             className="btn-secondary"
             style={{ padding: "14px 28px", fontSize: 15 }}
           >
@@ -572,13 +590,7 @@ export default function LandingClient() {
       </section>
 
       {/* ────── STAT BAR ────── */}
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-4 border-t border-b border-border bg-surface"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-4 border-t border-b border-border bg-surface">
         {[
           {
             num: "256",
@@ -604,10 +616,11 @@ export default function LandingClient() {
             label: "Key protection built for the era after quantum computers break RSA and ECC",
             tag: "NIST FIPS 203",
           },
-        ].map((s) => (
-          <motion.div
+        ].map((s, idx) => (
+          <ScrollReveal
             key={s.tag}
-            variants={cardVariants}
+            variant="fade-up"
+            delay={idx * 0.08}
             className="p-9 flex flex-col gap-2 border-b md:border-b-0 md:border-r border-border last:border-r-0 hover:bg-surface-raised transition-colors group cursor-default"
           >
             <div
@@ -627,12 +640,15 @@ export default function LandingClient() {
             >
               {s.tag}
             </span>
-          </motion.div>
+          </ScrollReveal>
         ))}
-      </motion.div>
+      </div>
 
       {/* ────── FEATURES ────── */}
       <FeaturesSection />
+
+      {/* ────── INDUSTRIES ────── */}
+      <IndustriesSection />
 
       {/* ────── HOW IT WORKS ────── */}
       <PipelineSection />
@@ -801,7 +817,7 @@ export default function LandingClient() {
             }}
           >
             <button
-              onClick={() => router.push("/register")}
+              onClick={() => setAuthModal('register')}
               className="btn-primary"
               style={{ padding: "14px 28px", fontSize: 15 }}
             >
@@ -824,6 +840,13 @@ export default function LandingClient() {
 
       {/* ────── FOOTER ────── */}
       <FooterSection />
+
+      {/* ────── AUTH MODAL ────── */}
+      <AuthModal
+        mode={authModal}
+        onClose={() => setAuthModal(null)}
+        onSwitch={(m) => setAuthModal(m)}
+      />
     </main>
   );
 }
