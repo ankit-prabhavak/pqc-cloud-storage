@@ -13,7 +13,6 @@ import {
 import Navbar from '@/components/ui/Navbar'
 import { encryptFile } from '@/lib/crypto'
 import { useAuth } from '@/context/AuthContext'
-import NavGradient from '@/components/ui/NavGradient'
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return '0 B'
@@ -105,8 +104,8 @@ export default function UploadPage() {
 }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: "var(--font-body), 'Inter', sans-serif" }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+    <div style={{ minHeight: '100vh', background: '#fafafa', fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap'); @keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
       {/* Navbar */}
       {/* <nav style={{ background: '#fff', borderBottom: '1px solid #f0f0f0', padding: '0 32px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
@@ -140,7 +139,6 @@ export default function UploadPage() {
 
       <Navbar />
 
-      <NavGradient>
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '40px 24px' }}>
 
         {/* Header */}
@@ -380,7 +378,6 @@ export default function UploadPage() {
           </div>
         )}
       </div>
-      </NavGradient>
     </div>
   )
 }

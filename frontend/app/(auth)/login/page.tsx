@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { FiShield, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi'
 import { Suspense } from 'react'
-
+import { TbCloudComputing } from 'react-icons/tb'
 
 function LoginPage() {
   const router = useRouter()
@@ -36,30 +36,31 @@ function LoginPage() {
     }
   }
 
-
   return (
-    <main className="min-h-screen bg-bg flex text-text font-body">
+    <main className="min-h-screen bg-white flex" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');`}</style>
+
       {/* Left panel — form */}
-      <div className="w-full max-w-[520px] mx-auto px-10 py-12 flex flex-col justify-center bg-bg border-r border-border/20">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '48px 40px', maxWidth: 520, margin: '0 auto' }} className="w-full">
 
         {/* Logo */}
-        <div className="w-full mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 text-text hover:text-burgundy-bright transition-colors">
-            <div className="w-8 h-8 bg-burgundy rounded-lg flex items-center justify-center border border-burgundy-bright/20">
-              <FiShield size={15} className="text-text" />
+        <div style={{ width: '100%', marginBottom: 40 }}>
+          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+            <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <TbCloudComputing size={20} color="#fff" />
             </div>
-            <span className="font-bold text-sm font-display text-text">PQC Storage</span>
+            <span style={{ fontWeight: 700, fontSize: 24, color: '#111827' }}>XORS</span>
           </Link>
         </div>
 
         {/* Heading */}
-        <div className="w-full mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-text font-display mb-2">
+        <div style={{ width: '100%', marginBottom: 32 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em', marginBottom: 8 }}>
             Welcome back
           </h1>
-          <p className="text-sm text-text-muted">
+          <p style={{ fontSize: 14, color: '#6b7280' }}>
             Don't have an account?{' '}
-            <Link href="/register" className="text-burgundy-bright hover:underline font-semibold transition-colors">
+            <Link href="/register" style={{ color: '#111827', fontWeight: 600, textDecoration: 'none' }}>
               Create one
             </Link>
           </p>
@@ -67,27 +68,27 @@ function LoginPage() {
 
         {/* Verified banner */}
         {verified && (
-          <div className="w-full p-3.5 bg-burgundy-dim border border-burgundy/30 rounded-lg mb-5 flex items-center gap-3">
-            <div className="w-5 h-5 rounded-full bg-burgundy/40 border border-burgundy/20 flex items-center justify-center flex-shrink-0">
-              <FiCheck size={11} className="text-text" />
+          <div style={{ width: '100%', padding: '12px 16px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#dcfce7', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FiCheck size={11} color="#15803d" />
             </div>
-            <p className="text-xs text-text-muted margin-0">Email verified successfully. You can now sign in.</p>
+            <p style={{ fontSize: 13, color: '#15803d', margin: 0 }}>Email verified successfully. You can now sign in.</p>
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div className="w-full p-3.5 bg-burgundy-dim/40 border border-burgundy/30 rounded-lg mb-5">
-            <p className="text-xs text-text-muted margin-0">{error}</p>
+          <div style={{ width: '100%', padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, marginBottom: 20 }}>
+            <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{error}</p>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* Email */}
           <div>
-            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block font-mono">
+            <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>
               Email address
             </label>
             <input
@@ -96,31 +97,35 @@ function LoginPage() {
               value={form.email}
               onChange={e => setForm({ ...form, email: e.target.value })}
               required
-              className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-lg text-sm text-text placeholder-text-muted/40 outline-none focus:border-burgundy focus:ring-1 focus:ring-burgundy transition-all"
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111827', outline: 'none', background: '#fff', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+              onFocus={e => e.target.style.borderColor = '#111827'}
+              onBlur={e => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
 
           {/* Password */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs font-semibold text-text-muted uppercase tracking-wider block font-mono">Password</label>
-              <Link href="/forgot-password" className="text-xs text-text-muted hover:text-text transition-colors">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#374151' }}>Password</label>
+              <Link href="/forgot-password" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none', fontWeight: 500 }}>
                 Forgot password?
               </Link>
             </div>
-            <div className="relative">
+            <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
                 value={form.password}
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 required
-                className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-lg text-sm text-text placeholder-text-muted/40 outline-none focus:border-burgundy focus:ring-1 focus:ring-burgundy transition-all pr-11"
+                style={{ width: '100%', padding: '11px 44px 11px 14px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111827', outline: 'none', background: '#fff', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+                onFocus={e => e.target.style.borderColor = '#111827'}
+                onBlur={e => e.target.style.borderColor = '#e5e7eb'}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-text-muted hover:text-text p-0 transition-colors"
+                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: 0 }}
               >
                 {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
               </button>
@@ -131,77 +136,84 @@ function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-burgundy hover:bg-burgundy-bright text-text font-semibold rounded-lg text-sm transition-all duration-200 hover:shadow-[0_0_20px_rgba(122,31,49,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2 cursor-pointer"
+            style={{ width: '100%', padding: '12px', background: loading ? '#6b7280' : '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 8, transition: 'background 0.15s' }}
           >
             {loading ? 'Signing in...' : (<>Sign in <FiArrowRight size={15} /></>)}
           </button>
         </form>
 
         {/* Divider */}
-        <div className="w-full flex items-center gap-3 my-6">
-          <div className="flex-1 h-[1px] bg-border" />
-          <span className="text-[10px] text-text-muted uppercase tracking-wider font-mono">secured with</span>
-          <div className="flex-1 h-[1px] bg-border" />
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0' }}>
+          <div style={{ flex: 1, height: 1, background: '#f0f0f0' }} />
+          <span style={{ fontSize: 12, color: '#9ca3af' }}>secured with</span>
+          <div style={{ flex: 1, height: 1, background: '#f0f0f0' }} />
         </div>
 
         {/* Security badges */}
-        <div className="w-full grid grid-cols-3 gap-2">
+        <div style={{ width: '100%', display: 'flex', gap: 8 }}>
           {['AES-256-GCM', 'ML-KEM', 'OTP Auth'].map(badge => (
-            <div key={badge} className="py-2 px-2 bg-surface border border-border rounded-lg text-center">
-              <span className="text-[10px] font-semibold text-text font-mono tracking-wide">{badge}</span>
+            <div key={badge} style={{ flex: 1, padding: '8px 10px', background: '#f9fafb', border: '1px solid #f0f0f0', borderRadius: 8, textAlign: 'center' }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#374151', fontFamily: 'DM Mono, monospace' }}>{badge}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right panel */}
-      <div className="hidden lg:flex flex-1 relative overflow-hidden flex-col justify-center px-14 py-16 bg-[#0B0A0C] border-l border-border">
-        {/* Glow orbs background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[20%] right-[10%] w-[35vw] h-[35vw] rounded-full bg-[radial-gradient(circle,rgba(122,31,49,0.12)_0%,transparent_70%)] blur-3xl" />
-          <div className="absolute bottom-[20%] left-[10%] w-[30vw] h-[30vw] rounded-full bg-[radial-gradient(circle,rgba(61,19,28,0.18)_0%,transparent_70%)] blur-3xl" />
-        </div>
+     {/* Right panel */}
+<div
+  style={{
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '64px 56px',
+    backgroundImage: `linear-gradient(rgba(17,24,39,0.5), rgba(17,24,39,0.6)), url('https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/template-images/new-template-assets/aws-library_photo_textures_677_1200.39cf0e4a6b5fd123e221b0c2dbb3b4d231e29c26.jpg')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+  className="hidden lg:flex"
+>
+  <div style={{ marginBottom: 48 }}>
+    <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16, textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+      Your files are waiting
+    </p>
+    <h2 style={{ fontSize: 32, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 16, textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+      End-to-end encrypted. Always.
+    </h2>
+    <p style={{ fontSize: 15, color: '#f9fafb', lineHeight: 1.65 }}>
+      Your files are encrypted with AES-256-GCM and keys protected by ML-KEM before anything reaches our servers. Not even we can read them.
+    </p>
+  </div>
 
-        <div className="mb-12 relative z-10">
-          <p className="text-xs font-semibold tracking-widest uppercase text-text-muted mb-4 font-mono">
-            Your files are waiting
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight text-text leading-snug mb-4 font-display">
-            End-to-end encrypted. Always.
-          </h2>
-          <p className="text-sm text-text-muted leading-relaxed font-body">
-            Your files are encrypted with AES-256-GCM and keys protected by ML-KEM before anything reaches our servers. Not even we can read them.
-          </p>
-        </div>
-
-        {/* Mini security score card */}
-        <div className="bg-surface-raised border border-border rounded-2xl p-6 mb-8 relative z-10 shadow-lg shadow-black/40">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-semibold text-text">Security Score</span>
-            <span className="text-xl font-bold text-burgundy-bright font-mono">95/100</span>
-          </div>
-          <div className="h-1.5 bg-border rounded-full overflow-hidden mb-4">
-            <div className="w-[95%] h-full bg-burgundy-bright rounded-full" />
-          </div>
-          {[
-            { label: 'Hybrid encryption active', points: '+40' },
-            { label: 'OTP verification enabled', points: '+25' },
-            { label: 'Download limit set', points: '+20' },
-            { label: 'Expiry configured', points: '+10' },
-          ].map(row => (
-            <div key={row.label} className="flex justify-between items-center mb-2.5 last:mb-0">
-              <span className="text-xs text-text-muted">{row.label}</span>
-              <span className="text-xs font-semibold text-text font-mono">{row.points}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="pt-6 border-t border-border relative z-10">
-          <p className="text-[11px] text-text-muted font-mono tracking-wide">
-            NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
-          </p>
-        </div>
+  {/* Mini security score card */}
+  <div style={{ background: 'rgba(26,34,52,0.85)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '24px 28px', marginBottom: 32 }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <span style={{ fontSize: 13, fontWeight: 600, color: '#e5e7eb' }}>Security Score</span>
+      <span style={{ fontSize: 22, fontWeight: 700, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>95/100</span>
+    </div>
+    <div style={{ height: 6, background: '#374151', borderRadius: 999, overflow: 'hidden', marginBottom: 16 }}>
+      <div style={{ width: '95%', height: '100%', background: 'linear-gradient(90deg, #4ade80, #22c55e)', borderRadius: 999 }} />
+    </div>
+    {[
+      { label: 'Hybrid encryption active', points: '+40' },
+      { label: 'OTP verification enabled', points: '+25' },
+      { label: 'Download limit set', points: '+20' },
+      { label: 'Expiry configured', points: '+10' },
+    ].map(row => (
+      <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <span style={{ fontSize: 12, color: '#9ca3af' }}>{row.label}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>{row.points}</span>
       </div>
+    ))}
+  </div>
+
+  <div style={{ paddingTop: 24, borderTop: '2.5px solid rgba(255,255,255,0.08)' }}>
+    <p style={{ fontSize: 12, color: '#f9fafb', fontFamily: 'DM Mono, monospace' }}>
+      NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
+    </p>
+  </div>
+</div>
     </main>
   )
 }
