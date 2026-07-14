@@ -7,3 +7,4 @@ venv/
 *.pyo
 .next/
 dist/
+frontend_detail/

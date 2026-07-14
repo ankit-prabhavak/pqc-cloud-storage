@@ -1,26 +1,187 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Custom Color Tokens */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-burgundy: var(--burgundy);
+  --color-burgundy-bright: var(--burgundy-bright);
+  --color-burgundy-dim: var(--burgundy-dim);
+
+  /* Custom Typography Tokens */
+  --font-display: var(--font-geist-sans);
+  --font-body: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --bg: #0B0A0C;
+  --surface: #151215;
+  --surface-raised: #1D1719;
+  --border: #2A2224;
+  --text: #F5F1EE;
+  --text-muted: #A69C9A;
+  --burgundy: #7A1F31;
+  --burgundy-bright: #9C2F44;
+  --burgundy-dim: #3D131C;
+  --radius: 0.625rem;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--burgundy);
+  --primary-foreground: var(--text);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: var(--text-muted);
+  --muted: var(--surface-raised);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--burgundy-dim);
+  --accent-foreground: var(--text);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--burgundy);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--burgundy);
+  --sidebar-primary-foreground: var(--text);
+  --sidebar-accent: var(--surface-raised);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--burgundy);
+}
+
+.dark {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--burgundy);
+  --primary-foreground: var(--text);
+  --secondary: var(--surface-raised);
+  --secondary-foreground: var(--text-muted);
+  --muted: var(--surface-raised);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--burgundy-dim);
+  --accent-foreground: var(--text);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--burgundy);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body), system-ui, sans-serif;
+  }
+  html {
+    font-family: var(--font-body), system-ui, sans-serif;
+    scroll-behavior: smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Premium Card hover styles */
+.card-premium {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  border-color: var(--burgundy) !important;
+  box-shadow: 0 10px 30px rgba(122, 31, 49, 0.25) !important;
+}
+
+/* Drifting animation classes */
+@keyframes drift-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+@keyframes drift-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-50px, 50px) scale(1.2); }
+}
+@keyframes drift-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  40% { transform: translate(60px, 30px) scale(0.95); }
+}
+
+.animate-drift-1 {
+  animation: drift-1 16s ease-in-out infinite;
+}
+.animate-drift-2 {
+  animation: drift-2 18s ease-in-out infinite;
+}
+.animate-drift-3 {
+  animation: drift-3 15s ease-in-out infinite;
+}
+
+/* Hide scrollbar on horizontal snap containers */
+[data-lenis-prevent]::-webkit-scrollbar {
+  display: none;
 }
