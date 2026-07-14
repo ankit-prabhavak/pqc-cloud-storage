@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import api from '@/lib/axios'
 import { FiShield, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi'
+import { TbCloudComputing } from 'react-icons/tb'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -33,31 +34,31 @@ export default function RegisterPage() {
     }
   }
 
-
   return (
-    <main className="min-h-screen bg-bg flex text-text font-body">
+    <main className="min-h-screen bg-white flex" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap'); .mono { font-family: 'DM Mono', monospace; }`}</style>
 
       {/* Left panel */}
-      <div className="w-full max-w-[520px] mx-auto px-10 py-12 flex flex-col justify-center bg-bg border-r border-border/20">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '48px 40px', maxWidth: 520, margin: '0 auto' }} className="w-full">
 
         {/* Logo */}
-        <div className="w-full mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 text-text hover:text-burgundy-bright transition-colors">
-            <div className="w-8 h-8 bg-burgundy rounded-lg flex items-center justify-center border border-burgundy-bright/20">
-              <FiShield size={15} className="text-text" />
+        <div style={{ width: '100%', marginBottom: 40 }}>
+          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+            <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <TbCloudComputing size={20} color="#fff" />
             </div>
-            <span className="font-bold text-sm font-display text-text">PQC Storage</span>
+            <span style={{ fontWeight: 700, fontSize: 24, color: '#111827' }}>XORS</span>
           </Link>
         </div>
 
         {/* Heading */}
-        <div className="w-full mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-text font-display mb-2">
+        <div style={{ width: '100%', marginBottom: 32 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em', marginBottom: 8 }}>
             Create your account
           </h1>
-          <p className="text-sm text-text-muted">
+          <p style={{ fontSize: 14, color: '#6b7280' }}>
             Already have an account?{' '}
-            <Link href="/login" className="text-burgundy-bright hover:underline font-semibold transition-colors">
+            <Link href="/login" style={{ color: '#111827', fontWeight: 600, textDecoration: 'none' }}>
               Sign in
             </Link>
           </p>
@@ -65,56 +66,62 @@ export default function RegisterPage() {
 
         {/* Error */}
         {error && (
-          <div className="w-full p-3.5 bg-burgundy-dim border border-burgundy/30 rounded-lg mb-5">
-            <p className="text-xs text-text-muted margin-0">{error}</p>
+          <div style={{ width: '100%', padding: '12px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, marginBottom: 20 }}>
+            <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{error}</p>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* Name */}
           <div>
-            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block font-mono">Full name</label>
+            <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Full name</label>
             <input
               type="text"
               placeholder="Ankit Prabhavak"
               value={form.name}
               onChange={e => setForm({ ...form, name: e.target.value })}
               required
-              className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-lg text-sm text-text placeholder-text-muted/40 outline-none focus:border-burgundy focus:ring-1 focus:ring-burgundy transition-all"
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111827', outline: 'none', background: '#fff', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+              onFocus={e => e.target.style.borderColor = '#111827'}
+              onBlur={e => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block font-mono">Email address</label>
+            <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Email address</label>
             <input
               type="email"
               placeholder="you@example.com"
               value={form.email}
               onChange={e => setForm({ ...form, email: e.target.value })}
               required
-              className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-lg text-sm text-text placeholder-text-muted/40 outline-none focus:border-burgundy focus:ring-1 focus:ring-burgundy transition-all"
+              style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111827', outline: 'none', background: '#fff', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+              onFocus={e => e.target.style.borderColor = '#111827'}
+              onBlur={e => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block font-mono">Password</label>
-            <div className="relative">
+            <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Password</label>
+            <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Minimum 8 characters"
                 value={form.password}
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 required
-                className="w-full px-3.5 py-2.5 bg-surface border border-border rounded-lg text-sm text-text placeholder-text-muted/40 outline-none focus:border-burgundy focus:ring-1 focus:ring-burgundy transition-all pr-11"
+                style={{ width: '100%', padding: '11px 44px 11px 14px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111827', outline: 'none', background: '#fff', boxSizing: 'border-box', transition: 'border-color 0.15s' }}
+                onFocus={e => e.target.style.borderColor = '#111827'}
+                onBlur={e => e.target.style.borderColor = '#e5e7eb'}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-text-muted hover:text-text p-0 transition-colors"
+                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: 0 }}
               >
                 {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
               </button>
@@ -122,14 +129,13 @@ export default function RegisterPage() {
 
             {/* Password strength */}
             {form.password.length > 0 && (
-              <div className="mt-3 flex flex-col gap-2 bg-surface-raised border border-border rounded-lg p-3">
+              <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {passwordChecks.map(check => (
-                  <div key={check.label} className="flex items-center gap-2">
-                    <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 border ${check.pass ? 'bg-burgundy/20 border-burgundy/40' : 'bg-surface border-border'
-                      }`}>
-                      <FiCheck size={9} className={check.pass ? 'text-burgundy-bright' : 'text-text-muted'} />
+                  <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <div style={{ width: 16, height: 16, borderRadius: '50%', background: check.pass ? '#f0fdf4' : '#f3f4f6', border: `1px solid ${check.pass ? '#bbf7d0' : '#e5e7eb'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <FiCheck size={9} color={check.pass ? '#15803d' : '#d1d5db'} />
                     </div>
-                    <span className={`text-xs ${check.pass ? 'text-text font-semibold' : 'text-text-muted'}`}>{check.label}</span>
+                    <span style={{ fontSize: 12, color: check.pass ? '#15803d' : '#9ca3af' }}>{check.label}</span>
                   </div>
                 ))}
               </div>
@@ -140,7 +146,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-burgundy hover:bg-burgundy-bright text-text font-semibold rounded-lg text-sm transition-all duration-200 hover:shadow-[0_0_20px_rgba(122,31,49,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2 cursor-pointer"
+            style={{ width: '100%', padding: '12px', background: loading ? '#6b7280' : '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 8, transition: 'background 0.15s' }}
           >
             {loading ? 'Creating account...' : (
               <>Create account <FiArrowRight size={15} /></>
@@ -149,58 +155,102 @@ export default function RegisterPage() {
         </form>
 
         {/* OTP note */}
-        <div className="w-full mt-5 p-3.5 bg-surface border border-border rounded-lg">
-          <p className="text-xs text-text-muted leading-relaxed font-body">
+        <div style={{ width: '100%', marginTop: 20, padding: '12px 16px', background: '#f9fafb', border: '1px solid #f0f0f0', borderRadius: 10 }}>
+          <p style={{ fontSize: 12, color: '#6b7280', margin: 0, lineHeight: 1.5 }}>
             After registering you will receive a 6-digit OTP to verify your email address before accessing your account.
           </p>
         </div>
       </div>
 
       {/* Right panel — info */}
-      <div className="hidden lg:flex flex-1 relative overflow-hidden flex-col justify-center px-14 py-16 bg-[#0B0A0C] border-l border-border">
-        {/* Radial glow background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[20%] right-[10%] w-[35vw] h-[35vw] rounded-full bg-[radial-gradient(circle,rgba(122,31,49,0.12)_0%,transparent_70%)] blur-3xl" />
-          <div className="absolute bottom-[20%] left-[10%] w-[30vw] h-[30vw] rounded-full bg-[radial-gradient(circle,rgba(61,19,28,0.18)_0%,transparent_70%)] blur-3xl" />
-        </div>
+<div
+  style={{
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '64px 56px',
+    backgroundImage: `linear-gradient(rgba(17,24,39,0.5), rgba(17,24,39,0.6)), url('https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/partners/approved/images/partner-marketing/salesforce/aws-library_illustration_data_IMG-1.13dc1356c2bc572b14564d908fde254ef7311f1a.png')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+  className="hidden lg:flex"
+>
+  <div style={{ marginBottom: 48 }}>
+    <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16 }}>
+      What happens to your files
+    </p>
+    <h2
+      style={{
+        fontSize: 32,
+        fontWeight: 700,
+        color: '#fff',
+        letterSpacing: '-0.02em',
+        lineHeight: 1.2,
+        marginBottom: 16,
+        textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+      }}
+    >
+      Encrypted before they leave your device
+    </h2>
+    <p style={{ fontSize: 15, color: '#f9fafb', lineHeight: 1.65 }}>
+      Every file goes through AES-256-GCM encryption. Keys are protected with ML-KEM — the NIST FIPS 203 standard. We never see your files in plaintext.
+    </p>
+  </div>
 
-        <div className="mb-12 relative z-10">
-          <p className="text-xs font-semibold tracking-widest uppercase text-text-muted mb-4 font-mono">
-            What happens to your files
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight text-text leading-snug mb-4 font-display">
-            Encrypted before they leave your device
-          </h2>
-          <p className="text-sm text-text-muted leading-relaxed font-body">
-            Every file goes through AES-256-GCM encryption. Keys are protected with ML-KEM — the NIST FIPS 203 standard. We never see your files in plaintext.
-          </p>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    {[
+      { title: 'AES-256-GCM', desc: 'File encryption — same strength used by banks and governments' },
+      { title: 'ML-KEM key wrapping', desc: 'NIST FIPS 203 — quantum-resistant key encapsulation' },
+      { title: 'Zero plaintext storage', desc: 'Cloudflare R2 only receives encrypted blobs' },
+      { title: 'Cryptographic audit trail', desc: 'SHA-256 chained logs for every action' },
+    ].map(item => (
+      <div
+        key={item.title}
+        style={{
+          display: 'flex',
+          gap: 14,
+          alignItems: 'flex-start',
+          background: 'rgba(26,34,52,0.55)',
+          backdropFilter: 'blur(6px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: 12,
+          padding: '14px 16px',
+        }}
+      >
+        <div
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            background: 'rgba(31,41,55,0.8)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            marginTop: 1,
+          }}
+        >
+          <FiCheck size={10} color="#d1d5db" />
         </div>
-
-        <div className="flex flex-col gap-5 relative z-10">
-          {[
-            { title: 'AES-256-GCM', desc: 'File encryption — same strength used by banks and governments' },
-            { title: 'ML-KEM key wrapping', desc: 'NIST FIPS 203 — quantum-resistant key encapsulation' },
-            { title: 'Zero plaintext storage', desc: 'Cloudflare R2 only receives encrypted blobs' },
-            { title: 'Cryptographic audit trail', desc: 'SHA-256 chained logs for every action' },
-          ].map(item => (
-            <div key={item.title} className="flex gap-3.5 items-start">
-              <div className="w-5 h-5 rounded-full bg-burgundy-dim border border-burgundy/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <FiCheck size={10} className="text-burgundy-bright" />
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-text font-mono mb-1">{item.title}</div>
-                <div className="text-xs text-text-muted leading-relaxed font-body">{item.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 pt-6 border-t border-border relative z-10">
-          <p className="text-[11px] text-text-muted font-mono tracking-wide">
-            NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
-          </p>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6', marginBottom: 2, fontFamily: 'DM Mono, monospace' }}>
+            {item.title}
+          </div>
+          <div style={{ fontSize: 13, color: '#d1d5db', lineHeight: 1.5 }}>{item.desc}</div>
         </div>
       </div>
+    ))}
+  </div>
+
+  <div style={{ marginTop: 48, paddingTop: 32, borderTop: '2.5px solid rgba(255,255,255,0.1)' }}>
+    <p style={{ fontSize: 12, color: '#9ca3af', fontFamily: 'DM Mono, monospace' }}>
+      NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
+    </p>
+  </div>
+</div>
     </main>
   )
 }
