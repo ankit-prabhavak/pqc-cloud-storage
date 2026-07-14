@@ -6,6 +6,7 @@ import Link from "next/link";
 import api from "@/lib/axios";
 import { FiShield, FiArrowRight, FiMail } from "react-icons/fi";
 import { Suspense } from "react";
+import { TbCloudComputing } from "react-icons/tb";
 
 function VerifyOTPPage() {
   const router = useRouter();
@@ -122,8 +123,8 @@ function VerifyOTPPage() {
           >
             <div
               style={{
-                width: 32,
-                height: 32,
+                width: 28,
+                height: 28,
                 background: "#111827",
                 borderRadius: 8,
                 display: "flex",
@@ -131,10 +132,10 @@ function VerifyOTPPage() {
                 justifyContent: "center",
               }}
             >
-              <FiShield size={15} color="#fff" />
+              <TbCloudComputing size={20} color="#fff" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: 15, color: "#111827" }}>
-              PQC Storage
+            <span style={{ fontWeight: 700, fontSize: 24, color: "#111827" }}>
+              XORS  
             </span>
           </Link>
         </div>

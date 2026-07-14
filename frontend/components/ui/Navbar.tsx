@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { FiShield, FiLogOut } from 'react-icons/fi'
+import { TbCloudComputing } from 'react-icons/tb'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -20,9 +21,9 @@ export default function Navbar() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
         <Link href={user ? '/dashboard' : '/'} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
           <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <FiShield size={13} color="#fff" />
+            <TbCloudComputing size={20} color="#fff" />
           </div>
-          <span style={{ fontWeight: 700, fontSize: 14, color: '#111827' }}>PQC Storage</span>
+          <span style={{ fontWeight: 700, fontSize: 24, color: '#111827' }}>XORS</span>
         </Link>
 
         <div style={{ display: 'flex', gap: 4 }}>

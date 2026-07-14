@@ -1,5 +1,6 @@
 "use client";
-
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import { useRouter } from "next/navigation";
 import {
   FiShield,
@@ -18,12 +19,41 @@ import {
   FiChevronRight,
   FiUpload,
   FiDatabase,
+  FiThumbsDown,
+  FiThumbsUp,
 } from "react-icons/fi";
-import Image from "next/image";
 import { Cpu, ShieldCheck, Fingerprint, TimerOff, EyeOff } from "lucide-react";
+import {
+  // ...your existing icons
+  FiGlobe,
+  FiChevronDown,
+  FiArrowUp,
+  FiMail,
+} from "react-icons/fi";
+import { TbCloudComputing, TbCloudLock } from "react-icons/tb";
+import { useEffect } from "react";
 
 export default function LandingPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+      lerp: 0.05,
+      wheelMultiplier: 0.5,
+    });
+
+    const handleScroll = (e: any) => {
+      console.log(e);
+    };
+
+    lenis.on("scroll", handleScroll);
+
+    return () => {
+      lenis.off("scroll", handleScroll);
+      lenis.destroy();
+    };
+  }, []);
 
   return (
     <main
@@ -44,11 +74,6 @@ export default function LandingPage() {
           content: ''; position: absolute; top: 20px; left: calc(100% + 8px);
           width: calc(100% - 16px); height: 1px; background: #e5e7eb;
         }
-        .feature-card {
-          border: 1px solid #f0f0f0; border-radius: 16px; padding: 32px;
-          background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .feature-card:hover { border-color: #d1d5db; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
         .nav-link { font-size: 14px; color: #6b7280; text-decoration: none; transition: color 0.15s; }
         .nav-link:hover { color: #111827; }
         .btn-primary {
@@ -130,8 +155,6 @@ export default function LandingPage() {
           padding: 10px 0; border-bottom: 1px solid #f9fafb;
         }
         .check-item:last-child { border-bottom: none; }
-        footer a { color: #6b7280; text-decoration: none; font-size: 14px; transition: color 0.15s; }
-        footer a:hover { color: #111827; }
         .footer-heading { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; margin-bottom: 16px; }
         .cta-section {
           background: #111827; border-radius: 24px; padding: 72px 48px;
@@ -143,6 +166,72 @@ export default function LandingPage() {
           h1 { font-size: 36px !important; }
         }
       `}</style>
+
+      <style>{`
+  .feature-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 32px;
+    background: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  }
+  .feature-card:hover {
+    border-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 24px rgba(94, 234, 212, 0.16),
+      0 8px 24px rgba(56, 189, 248, 0.16),
+      0 8px 24px rgba(99, 102, 241, 0.16),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+@keyframes floatBlue {
+  from { transform: translate(-120px, -60px) scale(1); }
+  to   { transform: translate(120px, 50px) scale(1.15); }
+}
+
+@keyframes floatCyan {
+  from { transform: translate(80px, 40px) scale(1.05); }
+  to   { transform: translate(-100px, -50px) scale(0.95); }
+}
+
+@keyframes floatPurple {
+  from { transform: translate(-80px, 60px) scale(1); }
+  to   { transform: translate(110px, -60px) scale(1.12); }
+}
+
+@keyframes floatGreen {
+  from { transform: translate(0px, 40px) scale(1); }
+  to   { transform: translate(80px, -50px) scale(1.08); }
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(130px);
+  opacity: 0.85;
+  will-change: transform, filter;
+  animation:
+    floatBlue 12s ease-in-out infinite alternate,
+    hueShift 20s linear infinite;
+}
+    @keyframes hueShift {
+  0% {
+    filter: blur(130px) hue-rotate(0deg) saturate(1);
+  }
+  25% {
+    filter: blur(130px) hue-rotate(20deg) saturate(1.2);
+  }
+  50% {
+    filter: blur(130px) hue-rotate(45deg) saturate(1.4);
+  }
+  75% {
+    filter: blur(130px) hue-rotate(20deg) saturate(1.2);
+  }
+  100% {
+    filter: blur(130px) hue-rotate(0deg) saturate(1);
+  }
+}
+`}</style>
 
       {/* ────── NAVBAR ────── */}
       <nav
@@ -166,8 +255,8 @@ export default function LandingPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div
             style={{
-              width: 32,
-              height: 32,
+              width: 28,
+              height: 28,
               background: "#111827",
               borderRadius: 8,
               display: "flex",
@@ -175,12 +264,12 @@ export default function LandingPage() {
               justifyContent: "center",
             }}
           >
-            <FiShield size={15} color="#fff" />
+            <TbCloudComputing size={20} color="#fff" />
           </div>
           <span
-            style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}
+            style={{ fontWeight: 700, fontSize: 24, letterSpacing: "-0.01em" }}
           >
-            PQC Storage
+            X0RS
           </span>
         </div>
 
@@ -188,7 +277,10 @@ export default function LandingPage() {
         <div
           style={{ display: "flex", alignItems: "center", gap: 32 }}
           className="hidden md:flex"
-        >
+        > 
+          <a href="/" className="nav-link">
+            Home
+          </a>
           <a href="#features" className="nav-link">
             Features
           </a>
@@ -197,6 +289,9 @@ export default function LandingPage() {
           </a>
           <a href="#security" className="nav-link">
             Security
+          </a>
+          <a href="#use-cases" className="nav-link">
+            Applications
           </a>
         </div>
 
@@ -220,341 +315,317 @@ export default function LandingPage() {
       </nav>
 
       {/* ────── HERO ────── */}
-      <section
-        style={{
-          paddingTop: 120,
-          paddingBottom: 80,
-          textAlign: "center",
-          maxWidth: 900,
-          margin: "0 auto",
-          padding: "120px 24px 80px",
-        }}
+      <div
+        style={{ position: "relative", overflow: "hidden", background: "#fff" }}
       >
-        {/* Eyebrow badge */}
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: 28,
-          }}
-        ></div>
-
-        <h1
-          style={{
-            fontSize: 60,
-            fontWeight: 700,
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
-            color: "#111827",
-            marginBottom: 24,
+            position: "absolute",
+            inset: 0,
+            height: "60%",
+            overflow: "hidden",
+            pointerEvents: "none",
+            zIndex: 0,
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 70%, transparent 100%)",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 70%, transparent 100%)",
           }}
         >
-          Your files, encrypted
-          <br />
-          <span style={{ color: "#6b7280", fontWeight: 400 }}>
-            before they leave your device.
-          </span>
-        </h1>
+          {/* Blue */}
+          <div
+            className="aurora-blob"
+            style={{
+              width: 700,
+              height: 700,
+              left: "28%",
+              top: "-340px",
+              background: "rgba(37,99,235,0.60)", // #2563EB
+              animation: "floatBlue 10s ease-in-out infinite alternate",
+            }}
+          />
 
-        <p
-          style={{
-            fontSize: 18,
-            color: "#6b7280",
-            maxWidth: 520,
-            margin: "0 auto 40px",
-            lineHeight: 1.6,
-            fontWeight: 400,
-          }}
-        >
-          AES-256-GCM file encryption. ML-KEM key encapsulation. Built on the
-          same NIST standards that will outlast quantum computers.
-        </p>
+          {/* Cyan */}
+          <div
+            className="aurora-blob"
+            style={{
+              width: 550,
+              height: 550,
+              left: "-120px",
+              top: "-180px",
+              background: "rgba(8,145,178,0.50)", // #0891B2
+              animation: "floatCyan 14s ease-in-out infinite alternate",
+            }}
+          />
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 12,
-            flexWrap: "wrap",
-          }}
-        >
-          <button
-            onClick={() => router.push("/register")}
-            className="btn-primary"
-            style={{ padding: "14px 28px", fontSize: 15 }}
-          >
-            Start for free
-            <FiArrowRight size={15} />
-          </button>
-          <button
-            onClick={() => router.push("/login")}
-            className="btn-secondary"
-            style={{ padding: "14px 28px", fontSize: 15 }}
-          >
-            Sign in to dashboard
-          </button>
+          {/* Purple */}
+          <div
+            className="aurora-blob"
+            style={{
+              width: 600,
+              height: 600,
+              right: "-120px",
+              top: "-180px",
+              background: "rgba(109,40,217,0.55)",
+              animation: "floatPurple 18s ease-in-out infinite alternate",
+            }}
+          />
+
+          {/* Emerald */}
+          <div
+            className="aurora-blob"
+            style={{
+              width: 450,
+              height: 450,
+              left: "50%",
+              top: "80px",
+              background: "rgba(5,150,105,0.22)",
+              animation: "floatGreen 22s ease-in-out infinite alternate",
+            }}
+          />
+          <div
+            className="aurora-blob"
+            style={{
+              width: 450,
+              height: 450,
+              left: "60%",
+              top: "-120px",
+              background: "rgba(251,146,60,.28)",
+              animation:
+                "floatOrange 16s ease-in-out infinite alternate, pulseBlue 6s ease-in-out infinite",
+            }}
+          />
         </div>
 
-        {/* Social proof micro-text */}
-        <p style={{ fontSize: 13, color: "#9ca3af", marginTop: 20 }}>
-          No credit card required · Zero plaintext stored · Open source
-        </p>
-
-        {/* ── HERO MOCKUP ── */}
         <div
-          className="hero-mockup"
-          style={{ marginTop: 56, textAlign: "left" }}
-        >
-          {/* Browser chrome */}
-          <div className="browser-bar">
-            <div className="browser-dot" style={{ background: "#fca5a5" }} />
-            <div className="browser-dot" style={{ background: "#fde68a" }} />
-            <div className="browser-dot" style={{ background: "#86efac" }} />
-            <div className="url-bar">app.pqcstorage.io/dashboard</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <FiLock size={11} color="#6b7280" />
-              <span
-                style={{
-                  fontSize: 11,
-                  color: "#6b7280",
-                  fontFamily: "DM Mono, monospace",
-                }}
-              >
-                Secure
-              </span>
-            </div>
-          </div>
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.004,
+            backgroundImage: `
+      linear-gradient(rgba(15,23,42,.018) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(15,23,42,.018) 0.5px, transparent 0.5px)
+    `,
+            backgroundSize: "72px 72px",
+            pointerEvents: "none",
+          }}
+        />
 
-          {/* Dashboard layout */}
-          <div style={{ display: "flex", minHeight: 340 }}>
-            {/* Sidebar */}
-            <div
-              style={{
-                width: 200,
-                borderRight: "1px solid #f3f4f6",
-                padding: "20px 12px",
-                flexShrink: 0,
-              }}
-              className="hidden md:block"
-            >
-              <div
-                style={{
-                  fontSize: 11,
-                  color: "#9ca3af",
-                  fontWeight: 600,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  marginBottom: 12,
-                  padding: "0 8px",
-                }}
-              >
-                Navigation
-              </div>
-              {[
-                { label: "Dashboard", icon: "▪", active: true },
-                { label: "My Files", icon: "▪", active: false },
-                { label: "Upload", icon: "▪", active: false },
-                { label: "Security", icon: "▪", active: false },
-                { label: "Audit Log", icon: "▪", active: false },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "8px 10px",
-                    borderRadius: 8,
-                    fontSize: 13,
-                    marginBottom: 2,
-                    cursor: "default",
-                    background: item.active ? "#111827" : "transparent",
-                    color: item.active ? "#fff" : "#6b7280",
-                    fontWeight: item.active ? 500 : 400,
-                  }}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.85) 75%, white 100%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <section className="relative z-10 w-full px-24 md:px-30 pt-50 pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-[1600px] mx-auto">
+            {/* Left: Text content */}
+            <div className="text-left lg:text-left max-w-lg mx-auto lg:mx-0">
+              <h1 className="text-5xl md:text-6xl font-bold leading-[1.08] tracking-tight text-gray-900 mb-6">
+                Your files, encrypted
+                <br />
+                <span className="text-gray-500 font-normal">
+                  before they leave your device.
+                </span>
+              </h1>
+
+              <p className="text-lg text-gray-500 leading-relaxed mb-10 max-w-lg">
+                AES-256-GCM file encryption. ML-KEM key encapsulation. Built on
+                the same NIST standards that will outlast quantum computers.
+              </p>
+
+              <div className="flex items-center gap-3 flex-wrap mb-5">
+                <button
+                  onClick={() => router.push("/register")}
+                  className="btn-primary"
+                  style={{ padding: "14px 28px", fontSize: 15 }}
                 >
-                  <FiFile size={14} />
-                  {item.label}
-                </div>
-              ))}
+                  Start for free
+                  <FiArrowRight size={15} />
+                </button>
+                <button
+                  onClick={() => router.push("/login")}
+                  className="btn-secondary"
+                  style={{ padding: "14px 28px", fontSize: 15 }}
+                >
+                  Sign in to dashboard
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-400">
+                No credit card required · Zero plaintext stored · Open source
+              </p>
             </div>
 
-            {/* Main */}
-            <div style={{ flex: 1, padding: 24 }}>
-              {/* Stats */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
-                  gap: 16,
-                  marginBottom: 24,
-                }}
-              >
-                {[
-                  {
-                    label: "Total files",
-                    value: "24",
-                    tag: "↑ 3 this week",
-                    color: "#374151",
-                  },
-                  {
-                    label: "Storage used",
-                    value: "1.2 GB",
-                    tag: "Unlimited",
-                    color: "#374151",
-                  },
-                  {
-                    label: "Security score",
-                    value: "94",
-                    tag: "/100 · Quantum-safe",
-                    color: "#15803d",
-                  },
-                ].map((s) => (
-                  <div
-                    key={s.label}
-                    style={{
-                      background: "#f9fafb",
-                      borderRadius: 10,
-                      padding: "16px",
-                      border: "1px solid #f0f0f0",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: 11,
-                        color: "#9ca3af",
-                        marginBottom: 6,
-                        fontWeight: 500,
-                      }}
-                    >
-                      {s.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 700,
-                        color: s.color,
-                        letterSpacing: "-0.02em",
-                        fontFamily: "DM Mono, monospace",
-                      }}
-                    >
-                      {s.value}
-                    </div>
-                    <div
-                      style={{ fontSize: 11, color: "#9ca3af", marginTop: 2 }}
-                    >
-                      {s.tag}
-                    </div>
+            {/* Right: Hero mockup */}
+            <div className="hero-mockup">
+              {/* Browser chrome */}
+              <div className="browser-bar">
+                <div
+                  className="browser-dot"
+                  style={{ background: "#fca5a5" }}
+                />
+                <div
+                  className="browser-dot"
+                  style={{ background: "#fde68a" }}
+                />
+                <div
+                  className="browser-dot"
+                  style={{ background: "#86efac" }}
+                />
+                <div className="url-bar">app.pqcstorage.io/dashboard</div>
+                <div className="flex items-center gap-1">
+                  <FiLock size={11} color="#6b7280" />
+                  <span className="text-[11px] text-gray-500 font-mono">
+                    Secure
+                  </span>
+                </div>
+              </div>
+
+              {/* Dashboard layout */}
+              <div className="flex min-h-[340px]">
+                {/* Sidebar */}
+                <div className="hidden md:block w-[200px] border-r border-gray-100 py-5 px-3 flex-shrink-0">
+                  <div className="text-[11px] text-gray-400 font-semibold tracking-wider uppercase mb-3 px-2">
+                    Navigation
                   </div>
-                ))}
-              </div>
-
-              {/* File table */}
-              <div
-                style={{
-                  background: "#fff",
-                  border: "1px solid #f0f0f0",
-                  borderRadius: 12,
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    padding: "12px 20px",
-                    borderBottom: "1px solid #f3f4f6",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span
-                    style={{ fontSize: 13, fontWeight: 600, color: "#374151" }}
-                  >
-                    Recent files
-                  </span>
-                  <span style={{ fontSize: 12, color: "#6b7280" }}>
-                    View all →
-                  </span>
-                </div>
-                {[
-                  {
-                    name: "research_paper_final.pdf",
-                    size: "2.4 MB",
-                    enc: "ML-KEM + AES",
-                    score: 94,
-                  },
-                  {
-                    name: "patient_records_q4.xlsx",
-                    size: "890 KB",
-                    enc: "ML-KEM + AES",
-                    score: 91,
-                  },
-                  {
-                    name: "source_code_backup.zip",
-                    size: "15.2 MB",
-                    enc: "AES only",
-                    score: 72,
-                  },
-                ].map((file) => (
-                  <div key={file.name} className="file-row">
+                  {[
+                    { label: "Dashboard", active: true },
+                    { label: "My Files", active: false },
+                    { label: "Upload", active: false },
+                    { label: "Security", active: false },
+                    { label: "Audit Log", active: false },
+                  ].map((item) => (
                     <div
-                      style={{ display: "flex", alignItems: "center", gap: 12 }}
+                      key={item.label}
+                      className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] mb-0.5 cursor-default ${
+                        item.active
+                          ? "bg-gray-900 text-white font-medium"
+                          : "text-gray-500 font-normal"
+                      }`}
                     >
+                      <FiFile size={14} />
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Main */}
+                <div className="flex-1 p-6">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    {[
+                      {
+                        label: "Total files",
+                        value: "24",
+                        tag: "↑ 3 this week",
+                        color: "text-gray-700",
+                      },
+                      {
+                        label: "Storage used",
+                        value: "1.2 GB",
+                        tag: "Unlimited",
+                        color: "text-gray-700",
+                      },
+                      {
+                        label: "Security score",
+                        value: "94",
+                        tag: "/100 · Quantum-safe",
+                        color: "text-green-700",
+                      },
+                    ].map((s) => (
                       <div
-                        style={{
-                          width: 34,
-                          height: 34,
-                          background: "#f3f4f6",
-                          borderRadius: 8,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
+                        key={s.label}
+                        className="bg-gray-50 rounded-[10px] p-4 border border-gray-100"
                       >
-                        <FiFile size={14} color="#6b7280" />
-                      </div>
-                      <div>
+                        <div className="text-[11px] text-gray-400 mb-1.5 font-medium">
+                          {s.label}
+                        </div>
                         <div
-                          style={{
-                            fontSize: 13,
-                            color: "#111827",
-                            fontWeight: 500,
-                          }}
+                          className={`text-[22px] font-bold tracking-tight font-mono ${s.color}`}
                         >
-                          {file.name}
+                          {s.value}
                         </div>
-                        <div style={{ fontSize: 11, color: "#9ca3af" }}>
-                          {file.size}
+                        <div className="text-[11px] text-gray-400 mt-0.5">
+                          {s.tag}
                         </div>
                       </div>
-                    </div>
-                    <div
-                      style={{ display: "flex", alignItems: "center", gap: 10 }}
-                    >
-                      <span
-                        className={`encryption-chip${file.enc === "AES only" ? " muted" : ""}`}
-                      >
-                        {file.enc}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 12,
-                          color: file.score >= 90 ? "#15803d" : "#6b7280",
-                          fontFamily: "DM Mono, monospace",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {file.score}/100
-                      </span>
-                    </div>
+                    ))}
                   </div>
-                ))}
+
+                  {/* File table */}
+                  <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+                    <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center">
+                      <span className="text-[13px] font-semibold text-gray-700">
+                        Recent files
+                      </span>
+                      <span className="text-xs text-gray-500">View all →</span>
+                    </div>
+                    {[
+                      {
+                        name: "research_paper_final.pdf",
+                        size: "2.4 MB",
+                        enc: "ML-KEM + AES",
+                        score: 94,
+                      },
+                      {
+                        name: "patient_records_q4.xlsx",
+                        size: "890 KB",
+                        enc: "ML-KEM + AES",
+                        score: 91,
+                      },
+                      {
+                        name: "source_code_backup.zip",
+                        size: "15.2 MB",
+                        enc: "AES only",
+                        score: 72,
+                      },
+                    ].map((file) => (
+                      <div key={file.name} className="file-row">
+                        <div className="flex items-center gap-3">
+                          <div className="w-[34px] h-[34px] bg-gray-100 rounded-lg flex items-center justify-center">
+                            <FiFile size={14} color="#6b7280" />
+                          </div>
+                          <div>
+                            <div className="text-[13px] text-gray-900 font-medium">
+                              {file.name}
+                            </div>
+                            <div className="text-[11px] text-gray-400">
+                              {file.size}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className={`encryption-chip${
+                              file.enc === "AES only" ? " muted" : ""
+                            }`}
+                          >
+                            {file.enc}
+                          </span>
+                          <span
+                            className={`text-xs font-mono font-semibold ${
+                              file.score >= 90
+                                ? "text-green-700"
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {file.score}/100
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* ────── STAT BAR ────── */}
       <div
@@ -1340,417 +1411,272 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ────── IMAGE PLACEHOLDER ────── */}
-      <section
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto 120px",
-          padding: "0 24px",
-        }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: 48,
-          }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              padding: "8px 16px",
-              borderRadius: 999,
-              background: "rgba(249, 115, 22, 0.12)",
-              color: "#f97316",
-              border: "1px solid rgba(249, 115, 22, 0.2)",
-              fontSize: 13,
-              fontWeight: 600,
-              marginBottom: 16,
-            }}
-          >
-            Platform Overview
-          </span>
-
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 800,
-              color: "#111827",
-              marginBottom: 16,
-            }}
-          >
-            Secure Cloud Storage for the Quantum Era
+      {/* ────── USE CASES / INDUSTRIES ────── */}
+      <section id="use-cases" className="max-w-6xl mx-auto px-6 py-24">
+        <div className="mb-14">
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-3">
+            Use cases
+          </p>
+          <h2 className="text-4xl font-bold tracking-tight text-gray-900 max-w-xl leading-tight mb-4">
+            Built for data that can't be compromised
           </h2>
-
-          <p
-            style={{
-              maxWidth: 700,
-              margin: "0 auto",
-              fontSize: 18,
-              lineHeight: 1.7,
-              color: "#6b7280",
-            }}
-          >
-            PQC Cloud Storage combines modern cloud architecture with
-            post-quantum cryptography, helping protect sensitive files against
-            future quantum computing threats.
+          <p className="text-base text-gray-500 max-w-xl leading-relaxed">
+            Wherever confidentiality has to outlast the next decade of
+            computing, PQC Cloud Storage fits in.
           </p>
         </div>
 
-        <div
-          style={{
-            borderRadius: 28,
-            overflow: "hidden",
-            background: "#fff",
-            border: "1px solid #e5e7eb",
-            boxShadow: "0 25px 60px rgba(0,0,0,0.12)",
-            height: 400, // adjust this
-          }}
-        >
-          <img
-            src="/pqc.png"
-            alt="PQC Cloud Storage"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
-              display: "block",
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 24,
-            flexWrap: "wrap",
-            marginTop: 40,
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
-              title: "AES-256",
-              desc: "File Encryption",
+              title: "Financial Records",
+              desc: "Store statements, audits, and transaction logs with hybrid AES + ML-KEM encryption built to government-grade standards.",
+              gradient:
+                "https://plus.unsplash.com/premium_photo-1679923813998-6603ee2466c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
             },
             {
-              title: "ML-KEM",
-              desc: "Quantum-Safe Key Exchange",
+              title: "Healthcare & Research",
+              desc: "Protect patient records and clinical research data with encryption designed to stay secure through the quantum transition.",
+              gradient:
+                "https://images.unsplash.com/photo-1543333995-a78aea2eee50?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGhlYWx0aGNhcmV8ZW58MHx8MHx8fDA%3D",
             },
             {
-              title: "Zero-Knowledge",
-              desc: "Privacy Focused",
+              title: "Legal & Compliance",
+              desc: "Keep case files, contracts, and privileged communications sealed with a tamper-evident, chained audit trail.",
+              gradient:
+                "https://plus.unsplash.com/premium_photo-1695449439526-9cebdbfa1a2c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bGVnYWwlMjBhbmQlMjBjb21wbGlhbmNlfGVufDB8fDB8fHww",
+            },
+            {
+              title: "Academic & R&D",
+              desc: "Share unpublished research and datasets with collaborators without exposing raw files to any third party, ever.",
+              gradient:
+                "https://plus.unsplash.com/premium_photo-1661374880675-0c79f7b1dad5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8YWNhZGVtaWMlMjBhbmQlMjByZXNlYXJjaHxlbnwwfHwwfHx8MA%3D%3D",
+            },
+            {
+              title: "Government & Defense",
+              desc: "Meet long-term confidentiality mandates with NIST FIPS 203 post-quantum key encapsulation, not experimental crypto.",
+              gradient:
+                "https://images.unsplash.com/photo-1760872646618-13594fc00567?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdvdmVybm1lbnQlMjBhbmQlMjBkZWZlbmNlfGVufDB8fDB8fHww",
+            },
+            {
+              title: "Enterprise IT",
+              desc: "Give engineering and ops teams a zero-trust drop-in for secrets, backups, and source archives with self-destruct controls.",
+              gradient:
+                "https://images.unsplash.com/photo-1606857521015-7f9fcf423740?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fEVudGVycHJpc2UlMjBpdHxlbnwwfHwwfHx8MA%3D%3D",
             },
           ].map((item) => (
             <div
               key={item.title}
-              style={{
-                minWidth: 220,
-                padding: "24px 32px",
-                borderRadius: 20,
-                background: "#ffffff",
-                border: "1px solid #e5e7eb",
-                textAlign: "center",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-              }}
+              className="rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden hover:border-gray-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out cursor-pointer group"
             >
-              <h3
-                style={{
-                  fontSize: 28,
-                  fontWeight: 800,
-                  color: "#111827",
-                  marginBottom: 8,
-                }}
+              <div
+                className="h-44 w-full transition-transform duration-500 ease-out group-hover:scale-105"
+                // style={{ background: item.gradient }}
               >
-                {item.title}
-              </h3>
-
-              <p
-                style={{
-                  color: "#6b7280",
-                  fontSize: 15,
-                  margin: 0,
-                }}
-              >
-                {item.desc}
-              </p>
+                <img
+                  src={item.gradient}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors duration-200">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-5">
+                  {item.desc}
+                </p>
+                <span className="inline-flex items-center text-sm font-semibold text-gray-900">
+                  <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden whitespace-nowrap transition-all duration-300 ease-out group-hover:mr-2">
+                    View more
+                  </span>
+                  <FiArrowRight
+                    size={16}
+                    className="text-gray-900 group-hover:translate-x-1 transition-transform duration-200"
+                  />
+                </span>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ────── CTA ────── */}
-      <section
-        style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 96px" }}
-      >
-        <div className="cta-section">
-          <h2
-            style={{
-              fontSize: 40,
-              fontWeight: 700,
-              color: "#fff",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.15,
-              marginBottom: 16,
-              maxWidth: 480,
-              margin: "0 auto 16px",
-            }}
-          >
-            Store files the right way
-          </h2>
-          <p
-            style={{
-              fontSize: 16,
-              color: "#9ca3af",
-              maxWidth: 400,
-              margin: "0 auto 36px",
-              lineHeight: 1.6,
-            }}
-          >
-            No credit card required. Your files are encrypted before they ever
-            leave your device.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 12,
-              flexWrap: "wrap",
-            }}
-          >
-            <button
-              onClick={() => router.push("/register")}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "14px 28px",
-                background: "#fff",
-                color: "#111827",
-                border: "none",
-                borderRadius: 10,
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Create your account
-              <FiArrowRight size={15} />
+      {/* ────── FEEDBACK BANNER ────── */}
+      <section className="max-w-7xl mx-auto px-6 mb-24">
+        <div
+          className="rounded-[28px] px-10 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8"
+          style={{
+            background:
+              "linear-gradient(90deg, #5eead4 0%, #38bdf8 35%, #6366f1 70%, #8b5cf6 100%)",
+          }}
+        >
+          <div>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              Did you find what you were looking for today?
+            </h3>
+            <p className="text-gray-800/80 text-base">
+              Let us know so we can improve the quality of the content on our
+              pages
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <button className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
+              Yes
+              <FiThumbsUp size={15} />
             </button>
-            <a
-              href="https://github.com/ankit-prabhavak/pqc-cloud-storage"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "14px 28px",
-                background: "transparent",
-                color: "#9ca3af",
-                border: "1.5px solid rgba(255,255,255,0.15)",
-                borderRadius: 10,
-                fontSize: 15,
-                fontWeight: 500,
-                textDecoration: "none",
-              }}
-            >
-              <FiGithub size={15} />
-              View on GitHub
-            </a>
+            <button className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
+              No
+              <FiThumbsDown size={15} />
+            </button>
           </div>
         </div>
       </section>
 
       {/* ────── FOOTER ────── */}
-      <footer
-        style={{ borderTop: "1px solid #f3f4f6", padding: "64px 24px 40px" }}
-      >
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1.5fr 1fr 1fr 1fr",
-              gap: 48,
-              marginBottom: 48,
-            }}
-          >
-            {/* Brand */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  marginBottom: 16,
-                }}
-              >
-                <div
-                  style={{
-                    width: 30,
-                    height: 30,
-                    background: "#111827",
-                    borderRadius: 7,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FiShield size={14} color="#fff" />
-                </div>
-                <span style={{ fontWeight: 700, fontSize: 14 }}>
-                  PQC Storage
-                </span>
+      <footer className="relative bg-[#0f1420] rounded-t-[60px] pt-24 pb-8 px-6 md:px-10 mt-24">
+        {/* Top row: Brand | Links | Newsletter */}
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 max-w-7xl mx-auto mb-8 pb-8 ">
+          {/* Left: Logo + name + description */}
+          <div className="max-w-[220px] flex-shrink-0">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center">
+                <TbCloudComputing size={20} className="text-gray-900" />
               </div>
-              <p
-                style={{
-                  fontSize: 14,
-                  color: "#6b7280",
-                  lineHeight: 1.6,
-                  marginBottom: 20,
-                  maxWidth: 240,
-                }}
-              >
-                Post-quantum secure cloud storage. Final year project built on
-                NIST standardized cryptography.
-              </p>
-              <div style={{ display: "flex", gap: 12 }}>
-                {[
-                  {
-                    icon: FiGithub,
-                    href: "https://github.com/ankit-prabhavak/pqc-cloud-storage",
-                  },
-                  { icon: FiTwitter, href: "#" },
-                  { icon: FiLinkedin, href: "#" },
-                ].map((s, i) => (
-                  <a
-                    key={i}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      width: 34,
-                      height: 34,
-                      borderRadius: 8,
-                      border: "1px solid #e5e7eb",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#6b7280",
-                      transition: "border-color 0.15s, color 0.15s",
-                    }}
-                  >
-                    <s.icon size={15} />
-                  </a>
-                ))}
-              </div>
+              <span className="text-white font-bold text-[20px] tracking-tight">
+                XORS
+              </span>
             </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Post-quantum secure cloud storage built on NIST standardized
+              cryptography.
+            </p>
+          </div>
 
-            {/* Product */}
-            <div>
-              <div className="footer-heading">Product</div>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
-              >
-                {[
+          {/* Middle: Link columns */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 flex-1 lg:mx-4">
+            {[
+              {
+                heading: "Product",
+                links: [
                   "Dashboard",
-                  "Upload files",
-                  "Security score",
-                  "Audit log",
-                  "File sharing",
-                ].map((item) => (
-                  <a key={item} href="#">
-                    {item}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Security */}
-            <div>
-              <div className="footer-heading">Security</div>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
-              >
-                {[
+                  "Upload Files",
+                  "Security Score",
+                  "Audit Log",
+                ],
+              },
+              {
+                heading: "Security",
+                links: [
                   "AES-256-GCM",
                   "ML-KEM (Kyber)",
                   "NIST FIPS 203",
-                  "Tamper detection",
-                  "Integrity hashing",
-                ].map((item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    style={{ fontFamily: "DM Mono, monospace", fontSize: 13 }}
-                  >
-                    {item}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Project */}
-            <div>
-              <div className="footer-heading">Project</div>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
-              >
-                {[
-                  "GitHub repo",
-                  "Research paper",
-                  "API docs",
+                  "Tamper Detection",
+                ],
+              },
+              {
+                heading: "Project",
+                links: [
+                  "GitHub Repo",
+                  "Documentation",
                   "Contributing",
                   "License (MIT)",
-                ].map((item) => (
-                  <a key={item} href="#">
-                    {item}
-                  </a>
-                ))}
+                ],
+              },
+              {
+                heading: "Help",
+                links: ["Contact Us", "FAQs", "Report an Issue"],
+              },
+            ].map((col) => (
+              <div key={col.heading}>
+                <h4 className="text-white text-sm font-bold mb-4">
+                  {col.heading}
+                </h4>
+                <ul className="flex flex-col gap-3">
+                  {col.links.map((link) => (
+                    <li key={link}>
+                      <a
+                        href="#"
+                        className="text-gray-400 text-sm hover:text-white hover:underline underline-offset-4 transition-colors duration-150"
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            ))}
           </div>
 
-          <div
-            style={{
-              borderTop: "1px solid #f3f4f6",
-              paddingTop: 28,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: 16,
-            }}
-          >
-            <span
-              style={{
-                fontSize: 13,
-                color: "#9ca3af",
-                fontFamily: "DM Mono, monospace",
-              }}
+          {/* Right: Newsletter */}
+          <div className="w-full lg:w-auto lg:min-w-[260px] flex-shrink-0">
+            <h4 className="text-white text-sm font-bold mb-3">Stay updated</h4>
+            <p className="text-gray-400 text-sm mb-4">
+              Get notified about new features and security updates.
+            </p>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex flex-col gap-2"
             >
-              © 2026 PQC Cloud Storage · Final Year Project
+              <input
+                type="email"
+                placeholder="you@email.com"
+                className="w-full bg-white/5 border border-gray-600 rounded-full px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 transition-colors duration-150"
+              />
+              <button
+                type="submit"
+                className="bg-white text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gray-100 transition-colors duration-200 w-full"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Back to top */}
+        <div className="flex justify-center mb-10">
+          <a
+            href="#top"
+            className="flex items-center gap-2 text-white text-sm font-semibold hover:underline underline-offset-4 transition-all duration-150"
+          >
+            Back to top
+            <FiArrowUp size={14} />
+          </a>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-700/60 mb-8" />
+
+        {/* Bottom bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-7xl mx-auto">
+          <div className="flex items-center gap-6 text-sm text-gray-400">
+            <a
+              href="#"
+              className="hover:text-white hover:underline underline-offset-4 transition-colors duration-150"
+            >
+              Privacy
+            </a>
+            <a
+              href="#"
+              className="hover:text-white hover:underline underline-offset-4 transition-colors duration-150"
+            >
+              Site Terms
+            </a>
+            <span className="text-gray-500">
+              © 2026 PQC Cloud Storage. All rights reserved.
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-              {["AES-256-GCM", "ML-KEM FIPS 203", "Zero plaintext"].map(
-                (label) => (
-                  <span
-                    key={label}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 5,
-                      fontSize: 12,
-                      color: "#9ca3af",
-                    }}
-                  >
-                    <FiShield size={11} color="#6b7280" />
-                    {label}
-                  </span>
-                ),
-              )}
-            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {[FiGithub, FiTwitter, FiLinkedin, FiMail].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-150"
+              >
+                <Icon size={14} />
+              </a>
+            ))}
           </div>
         </div>
       </footer>
