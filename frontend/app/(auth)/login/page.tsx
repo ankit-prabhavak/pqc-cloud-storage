@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { FiShield, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi'
 import { Suspense } from 'react'
-
+import { TbCloudComputing } from 'react-icons/tb'
 
 function LoginPage() {
   const router = useRouter()
@@ -46,10 +46,10 @@ function LoginPage() {
         {/* Logo */}
         <div style={{ width: '100%', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiShield size={15} color="#fff" />
+            <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <TbCloudComputing size={20} color="#fff" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: 15, color: '#111827' }}>PQC Storage</span>
+            <span style={{ fontWeight: 700, fontSize: 24, color: '#111827' }}>XORS</span>
           </Link>
         </div>
 
@@ -159,49 +159,61 @@ function LoginPage() {
         </div>
       </div>
 
-      {/* Right panel */}
-      <div style={{ flex: 1, background: '#111827', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '64px 56px' }} className="hidden lg:flex">
+     {/* Right panel */}
+<div
+  style={{
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '64px 56px',
+    backgroundImage: `linear-gradient(rgba(17,24,39,0.5), rgba(17,24,39,0.6)), url('https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/template-images/new-template-assets/aws-library_photo_textures_677_1200.39cf0e4a6b5fd123e221b0c2dbb3b4d231e29c26.jpg')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+  className="hidden lg:flex"
+>
+  <div style={{ marginBottom: 48 }}>
+    <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16, textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+      Your files are waiting
+    </p>
+    <h2 style={{ fontSize: 32, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 16, textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>
+      End-to-end encrypted. Always.
+    </h2>
+    <p style={{ fontSize: 15, color: '#f9fafb', lineHeight: 1.65 }}>
+      Your files are encrypted with AES-256-GCM and keys protected by ML-KEM before anything reaches our servers. Not even we can read them.
+    </p>
+  </div>
 
-        <div style={{ marginBottom: 48 }}>
-          <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#4b5563', marginBottom: 16 }}>
-            Your files are waiting
-          </p>
-          <h2 style={{ fontSize: 32, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 16 }}>
-            End-to-end encrypted. Always.
-          </h2>
-          <p style={{ fontSize: 15, color: '#6b7280', lineHeight: 1.65 }}>
-            Your files are encrypted with AES-256-GCM and keys protected by ML-KEM before anything reaches our servers. Not even we can read them.
-          </p>
-        </div>
-
-        {/* Mini security score card */}
-        <div style={{ background: '#1a2234', border: '1px solid #1f2937', borderRadius: 16, padding: '24px 28px', marginBottom: 32 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#e5e7eb' }}>Security Score</span>
-            <span style={{ fontSize: 22, fontWeight: 700, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>95/100</span>
-          </div>
-          <div style={{ height: 6, background: '#374151', borderRadius: 999, overflow: 'hidden', marginBottom: 16 }}>
-            <div style={{ width: '95%', height: '100%', background: 'linear-gradient(90deg, #4ade80, #22c55e)', borderRadius: 999 }} />
-          </div>
-          {[
-            { label: 'Hybrid encryption active', points: '+40' },
-            { label: 'OTP verification enabled', points: '+25' },
-            { label: 'Download limit set', points: '+20' },
-            { label: 'Expiry configured', points: '+10' },
-          ].map(row => (
-            <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontSize: 12, color: '#6b7280' }}>{row.label}</span>
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>{row.points}</span>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ paddingTop: 24, borderTop: '1px solid #1f2937' }}>
-          <p style={{ fontSize: 12, color: '#4b5563', fontFamily: 'DM Mono, monospace' }}>
-            NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
-          </p>
-        </div>
+  {/* Mini security score card */}
+  <div style={{ background: 'rgba(26,34,52,0.85)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '24px 28px', marginBottom: 32 }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <span style={{ fontSize: 13, fontWeight: 600, color: '#e5e7eb' }}>Security Score</span>
+      <span style={{ fontSize: 22, fontWeight: 700, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>95/100</span>
+    </div>
+    <div style={{ height: 6, background: '#374151', borderRadius: 999, overflow: 'hidden', marginBottom: 16 }}>
+      <div style={{ width: '95%', height: '100%', background: 'linear-gradient(90deg, #4ade80, #22c55e)', borderRadius: 999 }} />
+    </div>
+    {[
+      { label: 'Hybrid encryption active', points: '+40' },
+      { label: 'OTP verification enabled', points: '+25' },
+      { label: 'Download limit set', points: '+20' },
+      { label: 'Expiry configured', points: '+10' },
+    ].map(row => (
+      <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <span style={{ fontSize: 12, color: '#9ca3af' }}>{row.label}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: '#4ade80', fontFamily: 'DM Mono, monospace' }}>{row.points}</span>
       </div>
+    ))}
+  </div>
+
+  <div style={{ paddingTop: 24, borderTop: '2.5px solid rgba(255,255,255,0.08)' }}>
+    <p style={{ fontSize: 12, color: '#f9fafb', fontFamily: 'DM Mono, monospace' }}>
+      NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
+    </p>
+  </div>
+</div>
     </main>
   )
 }

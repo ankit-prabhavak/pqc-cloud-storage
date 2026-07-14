@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import api from '@/lib/axios'
 import { FiShield, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi'
+import { TbCloudComputing } from 'react-icons/tb'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -43,10 +44,10 @@ export default function RegisterPage() {
         {/* Logo */}
         <div style={{ width: '100%', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FiShield size={15} color="#fff" />
+            <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <TbCloudComputing size={20} color="#fff" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: 15, color: '#111827' }}>PQC Storage</span>
+            <span style={{ fontWeight: 700, fontSize: 24, color: '#111827' }}>XORS</span>
           </Link>
         </div>
 
@@ -162,44 +163,94 @@ export default function RegisterPage() {
       </div>
 
       {/* Right panel — info */}
-      <div style={{ flex: 1, background: '#111827', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '64px 56px' }} className="hidden lg:flex">
-        <div style={{ marginBottom: 48 }}>
-          <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#4b5563', marginBottom: 16 }}>
-            What happens to your files
-          </p>
-          <h2 style={{ fontSize: 32, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 16 }}>
-            Encrypted before they leave your device
-          </h2>
-          <p style={{ fontSize: 15, color: '#6b7280', lineHeight: 1.65 }}>
-            Every file goes through AES-256-GCM encryption. Keys are protected with ML-KEM — the NIST FIPS 203 standard. We never see your files in plaintext.
-          </p>
-        </div>
+<div
+  style={{
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '64px 56px',
+    backgroundImage: `linear-gradient(rgba(17,24,39,0.5), rgba(17,24,39,0.6)), url('https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/partners/approved/images/partner-marketing/salesforce/aws-library_illustration_data_IMG-1.13dc1356c2bc572b14564d908fde254ef7311f1a.png')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+  className="hidden lg:flex"
+>
+  <div style={{ marginBottom: 48 }}>
+    <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16 }}>
+      What happens to your files
+    </p>
+    <h2
+      style={{
+        fontSize: 32,
+        fontWeight: 700,
+        color: '#fff',
+        letterSpacing: '-0.02em',
+        lineHeight: 1.2,
+        marginBottom: 16,
+        textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+      }}
+    >
+      Encrypted before they leave your device
+    </h2>
+    <p style={{ fontSize: 15, color: '#f9fafb', lineHeight: 1.65 }}>
+      Every file goes through AES-256-GCM encryption. Keys are protected with ML-KEM — the NIST FIPS 203 standard. We never see your files in plaintext.
+    </p>
+  </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {[
-            { title: 'AES-256-GCM', desc: 'File encryption — same strength used by banks and governments' },
-            { title: 'ML-KEM key wrapping', desc: 'NIST FIPS 203 — quantum-resistant key encapsulation' },
-            { title: 'Zero plaintext storage', desc: 'Cloudflare R2 only receives encrypted blobs' },
-            { title: 'Cryptographic audit trail', desc: 'SHA-256 chained logs for every action' },
-          ].map(item => (
-            <div key={item.title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#1f2937', border: '1px solid #374151', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                <FiCheck size={10} color="#9ca3af" />
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#e5e7eb', marginBottom: 2, fontFamily: 'DM Mono, monospace' }}>{item.title}</div>
-                <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5 }}>{item.desc}</div>
-              </div>
-            </div>
-          ))}
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    {[
+      { title: 'AES-256-GCM', desc: 'File encryption — same strength used by banks and governments' },
+      { title: 'ML-KEM key wrapping', desc: 'NIST FIPS 203 — quantum-resistant key encapsulation' },
+      { title: 'Zero plaintext storage', desc: 'Cloudflare R2 only receives encrypted blobs' },
+      { title: 'Cryptographic audit trail', desc: 'SHA-256 chained logs for every action' },
+    ].map(item => (
+      <div
+        key={item.title}
+        style={{
+          display: 'flex',
+          gap: 14,
+          alignItems: 'flex-start',
+          background: 'rgba(26,34,52,0.55)',
+          backdropFilter: 'blur(6px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: 12,
+          padding: '14px 16px',
+        }}
+      >
+        <div
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            background: 'rgba(31,41,55,0.8)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            marginTop: 1,
+          }}
+        >
+          <FiCheck size={10} color="#d1d5db" />
         </div>
-
-        <div style={{ marginTop: 48, paddingTop: 32, borderTop: '1px solid #1f2937' }}>
-          <p style={{ fontSize: 12, color: '#4b5563', fontFamily: 'DM Mono, monospace' }}>
-            NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
-          </p>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#f3f4f6', marginBottom: 2, fontFamily: 'DM Mono, monospace' }}>
+            {item.title}
+          </div>
+          <div style={{ fontSize: 13, color: '#d1d5db', lineHeight: 1.5 }}>{item.desc}</div>
         </div>
       </div>
+    ))}
+  </div>
+
+  <div style={{ marginTop: 48, paddingTop: 32, borderTop: '2.5px solid rgba(255,255,255,0.1)' }}>
+    <p style={{ fontSize: 12, color: '#9ca3af', fontFamily: 'DM Mono, monospace' }}>
+      NIST FIPS 203 · AES-256-GCM · SHA-256 · MIT License
+    </p>
+  </div>
+</div>
     </main>
   )
 }
