@@ -32,6 +32,138 @@ import {
 } from "react-icons/fi";
 import { TbCloudComputing, TbCloudLock } from "react-icons/tb";
 import { useEffect } from "react";
+import Image from "next/image";
+
+const socialLinks = [
+  {
+    icon: FiGithub,
+    href: "https://github.com/ankit-prabhavak/pqc-cloud-storage/",
+    label: "GitHub",
+  },
+  {
+    icon: FiLinkedin,
+    href: "#", // if you have one
+    label: "LinkedIn",
+  },
+  {
+    icon: FiMail,
+    href: "mailto:team@xors.in",
+    label: "Email",
+  },
+  {
+    icon: FiTwitter,
+    href: "#", // only if you have a project account
+    label: "X",
+  },
+];
+
+const teamMembers = [
+  {
+    id: 1,
+    name: "Ankit Kumar",
+    image: "/team/ankit.png",
+    role: "Backend & Security",
+    description:
+      "Built secure backend services, authentication and post-quantum cryptography integration.",
+    profile: "https://linkedin.com/in/ankit-prabhavak",
+  },
+  {
+    id: 2,
+    name: "Abhijit Giri",
+    image: "/team/abhijit.jpeg",
+    role: "Frontend Engineer",
+    description:
+      "Designed responsive UI, dashboard and overall user experience.",
+    profile: "https://www.linkedin.com/in/jeetabhig/",
+  },
+  {
+    id: 3,
+    name: "Abhinav Mishra",
+    image: "/team/abhinav.png",
+    role: "Backend Engineer",
+    description: "Developed REST APIs, storage services and cloud integration.",
+    profile: "https://www.linkedin.com/in/abhinav-mishra-252234329",
+  },
+  {
+    id: 4,
+    name: "Anmol Gupta",
+    image: "/team/anmol.jpeg",
+    role: "Research & Testing",
+    description: "Worked on cryptography research, testing and validation.",
+    profile: "https://www.linkedin.com/in/anmol-gupta-714933308/",
+  },
+  {
+    id: 5,
+    name: "Kavya Chaturvedi",
+    image: "/team/kavya.jpeg",
+    role: "Cloud Engineer",
+    description:
+      "Worked on cloud deployment, storage integration and infrastructure.",
+    profile: "https://www.linkedin.com/in/kavyachaturvedi58",
+  },
+  {
+    id: 6,
+    name: "Devashish Tripathi",
+    image: "/team/deva.jpeg",
+    role: "QA & Documentation",
+    description:
+      "Handled testing, documentation and quality assurance throughout development.",
+    profile: "https://www.linkedin.com/in/devashish-tripathi-046b022a6",
+  },
+];
+
+const footerSections = [
+  {
+    heading: "Product",
+    links: [
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Upload Files", href: "/dashboard/upload" },
+      { label: "Security Score", href: "/dashboard" },
+      { label: "Audit Log", href: "/dashboard/audit" },
+    ],
+  },
+  {
+    heading: "Security",
+    links: [
+      { label: "AES-256-GCM", href: "#security" },
+      { label: "ML-KEM (Kyber)", href: "#security" },
+      { label: "NIST FIPS 203", href: "#security" },
+      { label: "Tamper Detection", href: "#security" },
+    ],
+  },
+  {
+    heading: "Project",
+    links: [
+      {
+        label: "GitHub Repo",
+        href: "https://github.com/ankit-prabhavak/pqc-cloud-storage",
+      },
+      {
+        label: "Documentation",
+        href: "https://github.com/ankit-prabhavak/pqc-cloud-storage/wiki",
+      },
+      {
+        label: "Contributing",
+        href: "https://github.com/ankit-prabhavak/pqc-cloud-storage/blob/main/CONTRIBUTING.md",
+      },
+      {
+        label: "License (MIT)",
+        href: "https://github.com/ankit-prabhavak/pqc-cloud-storage/blob/main/LICENSE",
+      },
+    ],
+  },
+  {
+    heading: "Help",
+    links: [
+      { label: "Contact Us", href: "/contact" },
+      { label: "FAQs", href: "#faq" },
+      {
+        label: "Report an Issue",
+        href: "https://github.com/ankit-prabhavak/pqc-cloud-storage/issues",
+      },
+    ],
+  },
+];
 
 export default function LandingPage() {
   const router = useRouter();
@@ -231,6 +363,255 @@ export default function LandingPage() {
     filter: blur(130px) hue-rotate(0deg) saturate(1);
   }
 }
+
+.team-section{
+    max-width:1300px;
+    margin:140px auto;
+    padding:0 24px;
+}
+
+.team-header{
+    text-align:center;
+    margin-bottom:70px;
+}
+
+.team-badge{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:999px;
+    background:#eef5ff;
+    color:#2563eb;
+    font-size:14px;
+    font-weight:600;
+}
+
+.team-header h2{
+    margin-top:18px;
+    font-size:48px;
+    font-weight:800;
+    line-height:1.15;
+    color:#111827;
+}
+
+.team-header p{
+    max-width:720px;
+    margin:24px auto 0;
+    font-size:18px;
+    color:#6b7280;
+    line-height:1.8;
+}
+
+.team-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+    gap:28px;
+}
+
+.team-card{
+
+    position:relative;
+
+    padding:38px;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    background:rgba(255,255,255,.72);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(59,130,246,.08);
+
+    box-shadow:
+    0 12px 40px rgba(15,23,42,.06);
+
+    transition:
+    .45s ease;
+
+    opacity:0;
+
+    animation:cardEnter .9s forwards;
+}
+
+.team-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    padding:1px;
+
+    border-radius:inherit;
+
+    background:linear-gradient(
+    135deg,
+    rgba(59,130,246,.35),
+    rgba(139,92,246,.25),
+    transparent);
+
+    -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite:xor;
+
+    mask-composite:exclude;
+
+    opacity:0;
+
+    transition:.4s;
+}
+
+.team-card:hover{
+
+    transform:
+    translateY(-12px)
+    rotate(0deg)
+    scale(1.03);
+
+    box-shadow:
+    0 28px 60px rgba(59,130,246,.14);
+}
+
+.team-card:hover::before{
+    opacity:1;
+}
+
+.avatar{
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+    135deg,
+    #2563eb,
+    #7c3aed);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:24px;
+}
+
+.team-card h3{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#111827;
+}
+
+.team-card span{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#2563eb;
+
+    font-weight:600;
+}
+
+.team-card p{
+
+    margin-top:18px;
+
+    line-height:1.7;
+
+    color:#6b7280;
+
+    font-size:15px;
+}
+
+.team-card a{
+
+    display:inline-flex;
+
+    margin-top:26px;
+
+    text-decoration:none;
+
+    color:#111827;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.team-card:hover a{
+
+    color:#2563eb;
+
+    transform:translateX(8px);
+}
+
+.card-1{
+
+    transform:rotate(-8deg);
+
+    animation-delay:.1s;
+}
+
+.card-2{
+
+    transform:rotate(6deg);
+
+    animation-delay:.25s;
+}
+
+.card-3{
+
+    transform:rotate(-5deg);
+
+    animation-delay:.4s;
+}
+
+.card-4{
+
+    transform:rotate(8deg);
+
+    animation-delay:.55s;
+}
+
+@keyframes cardEnter{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(80px)
+        rotate(var(--r,-8deg));
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        rotate(inherit);
+    }
+
+}
+
 `}</style>
 
       {/* ────── NAVBAR ────── */}
@@ -277,7 +658,7 @@ export default function LandingPage() {
         <div
           style={{ display: "flex", alignItems: "center", gap: 32 }}
           className="hidden md:flex"
-        > 
+        >
           <a href="/" className="nav-link">
             Home
           </a>
@@ -1501,42 +1882,81 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ────── FEEDBACK BANNER ────── */}
-      <section className="max-w-7xl mx-auto px-6 mb-24">
-        <div
-          className="rounded-[28px] px-10 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8"
-          style={{
-            background:
-              "linear-gradient(90deg, #5eead4 0%, #38bdf8 35%, #6366f1 70%, #8b5cf6 100%)",
-          }}
-        >
-          <div>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              Did you find what you were looking for today?
-            </h3>
-            <p className="text-gray-800/80 text-base">
-              Let us know so we can improve the quality of the content on our
-              pages
-            </p>
-          </div>
+      {/* ───────── TEAM SECTION ───────── */}
 
-          <div className="flex items-center gap-4 flex-shrink-0">
-            <button className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
-              Yes
-              <FiThumbsUp size={15} />
-            </button>
-            <button className="flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
-              No
-              <FiThumbsDown size={15} />
-            </button>
-          </div>
+      <section className="max-w-7xl mx-auto px-6 mb-28">
+        <div className="text-center mb-14">
+          <span className="inline-flex border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700">
+            Meet the Team
+          </span>
+
+          <h2 className="mt-5 text-4xl font-bold tracking-tight text-gray-900">
+            Built by passionate engineers.
+          </h2>
+
+          <p className="mt-4 max-w-2xl mx-auto text-gray-600 text-lg leading-8">
+            X0RS is a collaborative project focused on building a modern,
+            post-quantum secure cloud storage platform with privacy at its core.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {teamMembers.map((member, index) => (
+            <div
+              key={member.id}
+              className={`group rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:rotate-0 hover:shadow-2xl
+
+        ${
+          index === 0
+            ? "-rotate-3"
+            : index === 1
+              ? "rotate-2"
+              : index === 2
+                ? "-rotate-2"
+                : index === 3
+                  ? "rotate-3"
+                  : index === 4
+                    ? "-rotate-2"
+                    : "rotate-2"
+        }`}
+            >
+              <div className="relative w-14 h-14 overflow-hidden rounded-full border border-gray-200 transition-transform duration-300 group-hover:scale-110">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">
+                {member.name}
+              </h3>
+
+              <p className="mt-1 text-sm font-medium text-gray-500">
+                {member.role}
+              </p>
+
+              <p className="mt-4 text-sm leading-6 text-gray-600">
+                {member.description}
+              </p>
+
+              <a
+                href={member.profile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center text-sm font-semibold text-gray-900 transition-all duration-300 group-hover:translate-x-2"
+              >
+                View Profile
+              </a>
+            </div>
+          ))}
         </div>
       </section>
-
       {/* ────── FOOTER ────── */}
       <footer className="relative bg-[#0f1420] rounded-t-[60px] pt-24 pb-8 px-6 md:px-10 mt-24">
         {/* Top row: Brand | Links | Newsletter */}
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 max-w-7xl mx-auto mb-8 pb-8 ">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 max-w-7xl mx-auto mb-4 pb-4 ">
           {/* Left: Logo + name + description */}
           <div className="max-w-[220px] flex-shrink-0">
             <div className="flex items-center gap-3 mb-4">
@@ -1555,51 +1975,28 @@ export default function LandingPage() {
 
           {/* Middle: Link columns */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 flex-1 lg:mx-4">
-            {[
-              {
-                heading: "Product",
-                links: [
-                  "Dashboard",
-                  "Upload Files",
-                  "Security Score",
-                  "Audit Log",
-                ],
-              },
-              {
-                heading: "Security",
-                links: [
-                  "AES-256-GCM",
-                  "ML-KEM (Kyber)",
-                  "NIST FIPS 203",
-                  "Tamper Detection",
-                ],
-              },
-              {
-                heading: "Project",
-                links: [
-                  "GitHub Repo",
-                  "Documentation",
-                  "Contributing",
-                  "License (MIT)",
-                ],
-              },
-              {
-                heading: "Help",
-                links: ["Contact Us", "FAQs", "Report an Issue"],
-              },
-            ].map((col) => (
-              <div key={col.heading}>
+            {footerSections.map((section) => (
+              <div key={section.heading}>
                 <h4 className="text-white text-sm font-bold mb-4">
-                  {col.heading}
+                  {section.heading}
                 </h4>
+
                 <ul className="flex flex-col gap-3">
-                  {col.links.map((link) => (
-                    <li key={link}>
+                  {section.links.map((link) => (
+                    <li key={link.label}>
                       <a
-                        href="#"
+                        href={link.href}
+                        target={
+                          link.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          link.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
                         className="text-gray-400 text-sm hover:text-white hover:underline underline-offset-4 transition-colors duration-150"
                       >
-                        {link}
+                        {link.label}
                       </a>
                     </li>
                   ))}
@@ -1609,27 +2006,38 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Newsletter */}
-          <div className="w-full lg:w-auto lg:min-w-[260px] flex-shrink-0">
-            <h4 className="text-white text-sm font-bold mb-3">Stay updated</h4>
-            <p className="text-gray-400 text-sm mb-4">
-              Get notified about new features and security updates.
-            </p>
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="flex flex-col gap-2"
-            >
-              <input
-                type="email"
-                placeholder="you@email.com"
-                className="w-full bg-white/5 border border-gray-600 rounded-full px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 transition-colors duration-150"
-              />
-              <button
-                type="submit"
-                className="bg-white text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gray-100 transition-colors duration-200 w-full"
+          <div className="w-full lg:w-[260px] flex-shrink-0">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5">
+              <span className="inline-flex rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-medium text-gray-300 mb-3">
+                Stay Updated
+              </span>
+
+              <h4 className="text-white text-lg font-semibold">
+                Security updates
+              </h4>
+
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="mt-4 space-y-2.5"
               >
-                Subscribe
-              </button>
-            </form>
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder:text-gray-500 outline-none transition focus:border-white/25 focus:bg-white/10"
+                />
+
+                <button
+                  type="submit"
+                  className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
+                >
+                  Subscribe
+                </button>
+              </form>
+
+              <p className="mt-3 text-[11px] text-gray-500">
+                No spam. Unsubscribe anytime.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1668,10 +2076,14 @@ export default function LandingPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            {[FiGithub, FiTwitter, FiLinkedin, FiMail].map((Icon, i) => (
+            {socialLinks.map(({ icon: Icon, href, label }, i) => (
               <a
                 key={i}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                title={label}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-150"
               >
                 <Icon size={14} />

@@ -7,9 +7,10 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
-  title: 'PQC Cloud Storage',
-  description: 'Post-Quantum Cryptography Based Secure Cloud Storage'
-}
+  title: "X0RS – Post-Quantum Cloud Storage",
+  description:
+    "Zero-knowledge, post-quantum secure cloud storage with client-side encryption.",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
