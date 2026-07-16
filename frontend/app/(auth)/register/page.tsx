@@ -79,7 +79,7 @@ export default function RegisterPage() {
             <label style={{ fontSize: 13, fontWeight: 500, color: '#374151', display: 'block', marginBottom: 6 }}>Full name</label>
             <input
               type="text"
-              placeholder="Ankit Prabhavak"
+              placeholder="Johnny Depp"
               value={form.name}
               onChange={e => setForm({ ...form, name: e.target.value })}
               required
@@ -167,7 +167,7 @@ export default function RegisterPage() {
   style={{
     flex: 1,
     position: 'relative',
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     padding: '64px 56px',
