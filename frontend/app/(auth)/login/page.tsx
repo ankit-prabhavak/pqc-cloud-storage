@@ -38,7 +38,9 @@ function LoginPage() {
 
   return (
     <main className="min-h-screen bg-white flex" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+      
+      `}</style>
 
       {/* Left panel — form */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '48px 40px', maxWidth: 520, margin: '0 auto' }} className="w-full">
@@ -164,7 +166,7 @@ function LoginPage() {
   style={{
     flex: 1,
     position: 'relative',
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     padding: '64px 56px',
