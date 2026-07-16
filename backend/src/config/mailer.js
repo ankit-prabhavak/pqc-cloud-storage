@@ -20,8 +20,6 @@ export const sendEmail = async ({ to, subject, html, headers }) => {
     }),
   })
 
-  console.log(process.env.BREVO_API_KEY);
-
   if (!res.ok) {
     const errorBody = await res.text()
     throw new Error(`Brevo send failed: ${res.status} ${errorBody}`)
