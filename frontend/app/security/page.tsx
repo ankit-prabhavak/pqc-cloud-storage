@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import api from "@/lib/axios";
 import { SecurityDashboard } from "@/types";
 import {
@@ -10,7 +9,6 @@ import {
   FiActivity,
   FiCheck,
   FiAlertCircle,
-  FiClock,
   FiServer,
   FiKey,
   FiRefreshCw,
@@ -80,232 +78,177 @@ export default function SecurityPage() {
   const overview = data?.overview;
   const pqcStatus = data?.pqcStatus;
 
+  const statCards = [
+    {
+      label: "Avg security score",
+      value:
+        overview?.averageSecurityScore != null
+          ? `${overview.averageSecurityScore}/100`
+          : "—",
+      icon: <FiShield className="h-4 w-4 text-gray-500" />,
+      sub:
+        overview?.averageSecurityScore != null
+          ? overview.averageSecurityScore >= 90
+            ? "Quantum-safe"
+            : overview.averageSecurityScore >= 70
+              ? "Strong"
+              : "Needs attention"
+          : "—",
+      subClass:
+        overview?.averageSecurityScore != null
+          ? overview.averageSecurityScore >= 90
+            ? "text-green-700"
+            : overview.averageSecurityScore >= 70
+              ? "text-amber-700"
+              : "text-red-600"
+          : "text-gray-400",
+    },
+    {
+      label: "Quantum-safe files",
+      value: overview ? String(overview.quantumSafeFiles) : "—",
+      icon: <FiLock className="h-4 w-4 text-gray-500" />,
+      sub: `of ${overview?.totalFiles ?? 0} total files`,
+      subClass: "text-gray-400",
+    },
+    {
+      label: "AES-only files",
+      value: overview ? String(overview.classicalOnlyFiles) : "—",
+      icon: <FiServer className="h-4 w-4 text-gray-500" />,
+      sub: "without ML-KEM protection",
+      subClass:
+        (overview?.classicalOnlyFiles ?? 0) > 0
+          ? "text-amber-700"
+          : "text-gray-400",
+    },
+    {
+      label: "Encryption mode",
+      value:
+        overview?.encryptionPreference === "hybrid" ? "Hybrid" : "AES only",
+      icon: <FiKey className="h-4 w-4 text-gray-500" />,
+      sub:
+        overview?.encryptionPreference === "hybrid"
+          ? "AES-256 + ML-KEM"
+          : "AES-256-GCM",
+      subClass:
+        overview?.encryptionPreference === "hybrid"
+          ? "text-green-700"
+          : "text-gray-400",
+    },
+  ];
+
+  const quickActions = [
+    {
+      icon: <FiRefreshCw className="h-4 w-4 text-gray-700" />,
+      title: "Verify audit chain",
+      desc: "Check SHA-256 hash chain integrity",
+      action: verifyAuditChain,
+      loading: verifying,
+    },
+    {
+      icon: <FiShield className="h-4 w-4 text-gray-700" />,
+      title: "Security documentation",
+      desc: "NIST FIPS 203 — ML-KEM specification",
+      action: () =>
+        window.open("https://csrc.nist.gov/pubs/fips/203/final", "_blank"),
+      loading: false,
+    },
+    {
+      icon: <FiLogOut className="h-4 w-4 text-red-600" />,
+      title: "Revoke all sessions",
+      desc: "Sign out from all other devices",
+      action: async () => {
+        if (
+          window.confirm(
+            "This will sign you out from all other devices. Continue?"
+          )
+        ) {
+          await api.delete("/security/sessions/all");
+          alert("All other sessions revoked successfully.");
+        }
+      },
+      loading: false,
+      danger: true,
+    },
+  ];
+
+  const cryptoPrimitives = [
+    {
+      algo: "AES-256-GCM",
+      std: "FIPS 197",
+      purpose: "File encryption",
+    },
+    {
+      algo: "ML-KEM-768",
+      std: "FIPS 203",
+      purpose: "Key encapsulation",
+    },
+    {
+      algo: "SHA-256",
+      std: "FIPS 180-4",
+      purpose: "Integrity hashing",
+    },
+    {
+      algo: "bcrypt",
+      std: "RFC 2898",
+      purpose: "Password hashing",
+    },
+    {
+      algo: "JWT RS256",
+      std: "RFC 7519",
+      purpose: "Authentication",
+    },
+  ];
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#fafafa",
-        fontFamily: "'DM Sans', 'Inter', sans-serif",
-      }}
-    >
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap'); @keyframes spin { to { transform: rotate(360deg) } }`}</style>
-
-      {/* Navbar */}
-      {/* <nav style={{ background: '#fff', borderBottom: '1px solid #f0f0f0', padding: '0 32px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <div style={{ width: 28, height: 28, background: '#111827', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FiShield size={13} color="#fff" />
-                </div>
-                <span style={{ fontWeight: 700, fontSize: 14, color: '#111827' }}>PQC Storage</span>
-            </Link>
-            <div style={{ display: 'flex', gap: 4 }}>
-                {[
-                { label: 'Dashboard', href: '/dashboard', active: false },
-                { label: 'Upload', href: '/upload', active: false },
-                { label: 'Security', href: '/security', active: true },
-                ].map(item => (
-                <Link key={item.href} href={item.href} style={{
-                    padding: '6px 12px', borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: 'none',
-                    color: item.active ? '#111827' : '#6b7280',
-                    background: item.active ? '#f3f4f6' : 'transparent',
-                }}>
-                    {item.label}
-                </Link>
-                ))}
-            </div>
-            </div>
-            <Link href="/dashboard" style={{ fontSize: 13, color: '#6b7280', textDecoration: 'none' }}>
-            ← Back to dashboard
-            </Link>
-        </nav> */}
-
+    <div className="min-h-screen bg-zinc-50 font-sans">
       <Navbar />
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 32px" }}>
-        {/* Header */}
-        <div style={{ marginBottom: 32 }}>
-          <h1
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              color: "#111827",
-              letterSpacing: "-0.02em",
-              marginBottom: 6,
-            }}
-          >
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="mb-8 sm:mb-10">
+          <h1 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
             Security overview
           </h1>
-          <p style={{ fontSize: 14, color: "#6b7280" }}>
+          <p className="mt-1 text-sm text-gray-500">
             Monitor your encryption status, audit trail, and active sessions.
           </p>
         </div>
 
-        {/* Top stat cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
-            marginBottom: 24,
-          }}
-        >
-          {[
-            {
-              label: "Avg security score",
-              value:
-                overview?.averageSecurityScore != null
-                  ? `${overview.averageSecurityScore}/100`
-                  : "—",
-              icon: <FiShield size={16} color="#6b7280" />,
-              sub:
-                overview?.averageSecurityScore != null
-                  ? overview.averageSecurityScore >= 90
-                    ? "Quantum-safe"
-                    : overview.averageSecurityScore >= 70
-                      ? "Strong"
-                      : "Needs attention"
-                  : "—",
-              subColor:
-                overview?.averageSecurityScore != null
-                  ? overview.averageSecurityScore >= 90
-                    ? "#15803d"
-                    : overview.averageSecurityScore >= 70
-                      ? "#b45309"
-                      : "#dc2626"
-                  : "#9ca3af",
-            },
-            {
-              label: "Quantum-safe files",
-              value: overview ? String(overview.quantumSafeFiles) : "—",
-              icon: <FiLock size={16} color="#6b7280" />,
-              sub: `of ${overview?.totalFiles ?? 0} total files`,
-              subColor: "#9ca3af",
-            },
-            {
-              label: "AES-only files",
-              value: overview ? String(overview.classicalOnlyFiles) : "—",
-              icon: <FiServer size={16} color="#6b7280" />,
-              sub: "without ML-KEM protection",
-              subColor:
-                (overview?.classicalOnlyFiles ?? 0) > 0 ? "#b45309" : "#9ca3af",
-            },
-            {
-              label: "Encryption mode",
-              value:
-                overview?.encryptionPreference === "hybrid"
-                  ? "Hybrid"
-                  : "AES only",
-              icon: <FiKey size={16} color="#6b7280" />,
-              sub:
-                overview?.encryptionPreference === "hybrid"
-                  ? "AES-256 + ML-KEM"
-                  : "AES-256-GCM",
-              subColor:
-                overview?.encryptionPreference === "hybrid"
-                  ? "#15803d"
-                  : "#9ca3af",
-            },
-          ].map((card) => (
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {statCards.map((card) => (
             <div
               key={card.label}
-              style={{
-                background: "#fff",
-                border: "1px solid #f0f0f0",
-                borderRadius: 14,
-                padding: "20px 22px",
-              }}
+              className="rounded-2xl border border-gray-200 bg-white p-5"
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  marginBottom: 14,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 500,
-                    color: "#9ca3af",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                  }}
-                >
+              <div className="mb-4 flex items-start justify-between">
+                <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-gray-400">
                   {card.label}
                 </span>
-                <div
-                  style={{
-                    width: 30,
-                    height: 30,
-                    background: "#f9fafb",
-                    border: "1px solid #f0f0f0",
-                    borderRadius: 8,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50">
                   {card.icon}
                 </div>
               </div>
-              <div
-                style={{
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: "#111827",
-                  fontFamily: "DM Mono, monospace",
-                  marginBottom: 4,
-                }}
-              >
+
+              <div className="mb-1 break-words font-mono text-xl font-bold text-gray-900 sm:text-2xl tabular-nums">
                 {card.value}
               </div>
-              <div style={{ fontSize: 12, color: card.subColor }}>
-                {card.sub}
-              </div>
+
+              <div className={`text-xs ${card.subClass}`}>{card.sub}</div>
             </div>
           ))}
         </div>
 
-        <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}
-        >
-          {/* PQC status card */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #f0f0f0",
-              borderRadius: 16,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid #f0f0f0",
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <Cpu size={16} color="#374151" />
-              <h2
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#111827",
-                  margin: 0,
-                }}
-              >
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-4 sm:px-6">
+              <Cpu className="h-4 w-4 text-gray-700" />
+              <h2 className="text-sm font-semibold text-gray-900">
                 Post-quantum status
               </h2>
             </div>
-            <div style={{ padding: "20px 24px" }}>
+
+            <div className="p-4 sm:p-6">
               {pqcStatus ? (
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 14 }}
-                >
+                <div className="flex flex-col gap-4">
                   {[
                     {
                       label: "Algorithm",
@@ -317,7 +260,11 @@ export default function SecurityPage() {
                       value: pqcStatus.nistStandard,
                       mono: true,
                     },
-                    { label: "Key size", value: pqcStatus.keySize, mono: true },
+                    {
+                      label: "Key size",
+                      value: pqcStatus.keySize,
+                      mono: true,
+                    },
                     {
                       label: "Security level",
                       value: pqcStatus.securityLevel,
@@ -331,129 +278,66 @@ export default function SecurityPage() {
                   ].map((item) => (
                     <div
                       key={item.label}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        paddingBottom: 14,
-                        borderBottom: "1px solid #f9fafb",
-                      }}
+                      className="flex flex-col gap-1 border-b border-gray-50 pb-4 sm:flex-row sm:items-center sm:justify-between"
                     >
-                      <span style={{ fontSize: 13, color: "#6b7280" }}>
-                        {item.label}
-                      </span>
+                      <span className="text-sm text-gray-500">{item.label}</span>
                       <span
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 600,
-                          color: "#111827",
-                          fontFamily: item.mono
-                            ? "DM Mono, monospace"
-                            : "inherit",
-                        }}
+                        className={`text-sm font-semibold text-gray-900 ${
+                          item.mono ? "font-mono" : ""
+                        }`}
                       >
                         {item.value}
                       </span>
                     </div>
                   ))}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      padding: "10px 14px",
-                      background: "#f0fdf4",
-                      border: "1px solid #bbf7d0",
-                      borderRadius: 10,
-                    }}
-                  >
-                    <FiCheck size={14} color="#15803d" />
-                    <span
-                      style={{
-                        fontSize: 13,
-                        color: "#15803d",
-                        fontWeight: 500,
-                      }}
-                    >
+
+                  <div className="flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+                    <FiCheck className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
+                    <span className="text-sm font-medium text-green-700">
                       System is quantum-safe
                     </span>
                   </div>
                 </div>
               ) : (
-                <p style={{ fontSize: 13, color: "#9ca3af" }}>
+                <p className="text-sm text-gray-400">
                   Connect to backend to see PQC status.
                 </p>
               )}
             </div>
           </div>
 
-          {/* Audit chain verification */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #f0f0f0",
-              borderRadius: 16,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid #f0f0f0",
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <FiActivity size={16} color="#374151" />
-              <h2
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#111827",
-                  margin: 0,
-                }}
-              >
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-4 sm:px-6">
+              <FiActivity className="h-4 w-4 text-gray-700" />
+              <h2 className="text-sm font-semibold text-gray-900">
                 Audit chain integrity
               </h2>
             </div>
-            <div style={{ padding: "20px 24px" }}>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "#6b7280",
-                  lineHeight: 1.6,
-                  marginBottom: 20,
-                }}
-              >
+
+            <div className="p-4 sm:p-6">
+              <p className="mb-5 text-sm leading-6 text-gray-500">
                 Every action is logged with a SHA-256 hash chain. Each log entry
                 signs the previous one making the audit trail tamper-evident.
               </p>
 
               {auditValid !== null && (
                 <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "12px 16px",
-                    borderRadius: 10,
-                    marginBottom: 16,
-                    background: auditValid ? "#f0fdf4" : "#fef2f2",
-                    border: `1px solid ${auditValid ? "#bbf7d0" : "#fecaca"}`,
-                  }}
+                  className={`mb-4 flex items-start gap-3 rounded-xl border px-4 py-3 ${
+                    auditValid
+                      ? "border-green-200 bg-green-50"
+                      : "border-red-200 bg-red-50"
+                  }`}
                 >
                   {auditValid ? (
-                    <FiCheck size={15} color="#15803d" />
+                    <FiCheck className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
                   ) : (
-                    <FiAlertCircle size={15} color="#dc2626" />
+                    <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
                   )}
+
                   <span
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: auditValid ? "#15803d" : "#dc2626",
-                    }}
+                    className={`text-sm font-medium ${
+                      auditValid ? "text-green-700" : "text-red-600"
+                    }`}
                   >
                     {auditValid
                       ? "Audit chain intact — no tampering detected"
@@ -465,223 +349,85 @@ export default function SecurityPage() {
               <button
                 onClick={verifyAuditChain}
                 disabled={verifying}
-                style={{
-                  width: "100%",
-                  padding: "11px",
-                  border: "1.5px solid #e5e7eb",
-                  borderRadius: 10,
-                  background: "#fff",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: "#374151",
-                  cursor: verifying ? "not-allowed" : "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {verifying ? (
                   <>
-                    <div
-                      style={{
-                        width: 14,
-                        height: 14,
-                        border: "2px solid #e5e7eb",
-                        borderTopColor: "#111827",
-                        borderRadius: "50%",
-                        animation: "spin 0.7s linear infinite",
-                      }}
-                    />{" "}
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-200 border-t-gray-900" />
                     Verifying...
                   </>
                 ) : (
                   <>
-                    <FiRefreshCw size={13} /> Verify audit chain
+                    <FiRefreshCw className="h-4 w-4" />
+                    Verify audit chain
                   </>
                 )}
               </button>
 
-              <div style={{ marginTop: 20 }}>
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: "#9ca3af",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.06em",
-                    marginBottom: 12,
-                  }}
-                >
+              <div className="mt-5">
+                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400">
                   Recent audit entries
                 </div>
-                {auditLogs.slice(0, 5).map((log, i) => (
-                  <div
-                    key={log._id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "9px 0",
-                      borderBottom: i < 4 ? "1px solid #f9fafb" : "none",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: "50%",
-                        background: "#d1d5db",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <span
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 500,
-                          color: "#374151",
-                          fontFamily: "DM Mono, monospace",
-                        }}
+
+                {auditLogs.length > 0 ? (
+                  <div className="divide-y divide-gray-50">
+                    {auditLogs.slice(0, 5).map((log) => (
+                      <div
+                        key={log._id}
+                        className="flex items-start gap-3 py-3"
                       >
-                        {log.action}
-                      </span>
-                      {log.fileId && (
-                        <span style={{ fontSize: 12, color: "#9ca3af" }}>
-                          {" "}
-                          — {log.fileId.originalName}
+                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300" />
+
+                        <div className="min-w-0 flex-1">
+                          <span className="font-mono text-sm font-medium text-gray-700">
+                            {log.action}
+                          </span>
+                          {log.fileId && (
+                            <span className="text-sm text-gray-400">
+                              {" "}
+                              — {log.fileId.originalName}
+                            </span>
+                          )}
+                        </div>
+
+                        <span className="whitespace-nowrap text-xs text-gray-400">
+                          {timeAgo(log.timestamp)}
                         </span>
-                      )}
-                    </div>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: "#9ca3af",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {timeAgo(log.timestamp)}
-                    </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                {auditLogs.length === 0 && (
-                  <p style={{ fontSize: 13, color: "#9ca3af" }}>
-                    No audit entries yet.
-                  </p>
+                ) : (
+                  <p className="text-sm text-gray-400">No audit entries yet.</p>
                 )}
               </div>
             </div>
           </div>
 
-          {/* NIST algorithms used */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #f0f0f0",
-              borderRadius: 16,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid #f0f0f0",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#111827",
-                  margin: 0,
-                }}
-              >
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <div className="border-b border-gray-200 px-4 py-4 sm:px-6">
+              <h2 className="text-sm font-semibold text-gray-900">
                 Cryptographic primitives
               </h2>
             </div>
-            <div style={{ padding: "8px 0" }}>
-              {[
-                {
-                  algo: "AES-256-GCM",
-                  std: "FIPS 197",
-                  purpose: "File encryption",
-                  status: "active",
-                },
-                {
-                  algo: "ML-KEM-768",
-                  std: "FIPS 203",
-                  purpose: "Key encapsulation",
-                  status: "active",
-                },
-                {
-                  algo: "SHA-256",
-                  std: "FIPS 180-4",
-                  purpose: "Integrity hashing",
-                  status: "active",
-                },
-                {
-                  algo: "bcrypt",
-                  std: "RFC 2898",
-                  purpose: "Password hashing",
-                  status: "active",
-                },
-                {
-                  algo: "JWT RS256",
-                  std: "RFC 7519",
-                  purpose: "Authentication",
-                  status: "active",
-                },
-              ].map((item, i, arr) => (
+
+            <div className="divide-y divide-gray-50">
+              {cryptoPrimitives.map((item) => (
                 <div
                   key={item.algo}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "13px 24px",
-                    borderBottom:
-                      i < arr.length - 1 ? "1px solid #f9fafb" : "none",
-                  }}
+                  className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
                 >
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 12 }}
-                  >
-                    <div
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: "50%",
-                        background: "#22c55e",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "#111827",
-                          fontFamily: "DM Mono, monospace",
-                        }}
-                      >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+
+                    <div className="min-w-0">
+                      <div className="truncate font-mono text-sm font-semibold text-gray-900">
                         {item.algo}
                       </div>
-                      <div style={{ fontSize: 11, color: "#9ca3af" }}>
-                        {item.purpose}
-                      </div>
+                      <div className="text-xs text-gray-400">{item.purpose}</div>
                     </div>
                   </div>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: "#6b7280",
-                      background: "#f3f4f6",
-                      padding: "3px 8px",
-                      borderRadius: 5,
-                      fontFamily: "DM Mono, monospace",
-                    }}
-                  >
+
+                  <span className="inline-flex w-fit rounded-md bg-gray-100 px-2 py-1 font-mono text-[11px] font-semibold text-gray-600">
                     {item.std}
                   </span>
                 </div>
@@ -689,124 +435,40 @@ export default function SecurityPage() {
             </div>
           </div>
 
-          {/* Quick actions */}
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid #f0f0f0",
-              borderRadius: 16,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid #f0f0f0",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "#111827",
-                  margin: 0,
-                }}
-              >
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <div className="border-b border-gray-200 px-4 py-4 sm:px-6">
+              <h2 className="text-sm font-semibold text-gray-900">
                 Security actions
               </h2>
             </div>
-            <div style={{ padding: "12px" }}>
-              {[
-                {
-                  icon: <FiRefreshCw size={16} color="#374151" />,
-                  title: "Verify audit chain",
-                  desc: "Check SHA-256 hash chain integrity",
-                  action: verifyAuditChain,
-                  loading: verifying,
-                },
-                {
-                  icon: <FiShield size={16} color="#374151" />,
-                  title: "Security documentation",
-                  desc: "NIST FIPS 203 — ML-KEM specification",
-                  action: () =>
-                    window.open(
-                      "https://csrc.nist.gov/pubs/fips/203/final",
-                      "_blank",
-                    ),
-                  loading: false,
-                },
-                {
-                  icon: <FiLogOut size={16} color="#dc2626" />,
-                  title: "Revoke all sessions",
-                  desc: "Sign out from all other devices",
-                  action: async () => {
-                    if (
-                      window.confirm(
-                        "This will sign you out from all other devices. Continue?",
-                      )
-                    ) {
-                      await api.delete("/security/sessions/all");
-                      alert("All other sessions revoked successfully.");
-                    }
-                  },
-                  loading: false,
-                  danger: true,
-                },
-              ].map((item, i) => (
+
+            <div className="p-3">
+              {quickActions.map((item) => (
                 <button
                   key={item.title}
                   onClick={item.action}
                   disabled={item.loading}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 14,
-                    padding: "14px 12px",
-                    borderRadius: 10,
-                    border: "none",
-                    background: "#fff",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "background 0.1s",
-                    marginBottom: 4,
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = "#f9fafb")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = "#fff")
-                  }
+                  className="mb-1 flex w-full items-start gap-3 rounded-xl bg-white px-3 py-3 text-left transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      background: item.danger ? "#fef2f2" : "#f9fafb",
-                      border: `1px solid ${item.danger ? "#fecaca" : "#f0f0f0"}`,
-                      borderRadius: 9,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
+                      item.danger
+                        ? "border-red-200 bg-red-50"
+                        : "border-gray-200 bg-gray-50"
+                    }`}
                   >
                     {item.icon}
                   </div>
-                  <div>
+
+                  <div className="min-w-0">
                     <div
-                      style={{
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: item.danger ? "#dc2626" : "#111827",
-                        marginBottom: 2,
-                      }}
+                      className={`text-sm font-semibold ${
+                        item.danger ? "text-red-600" : "text-gray-900"
+                      }`}
                     >
                       {item.title}
                     </div>
-                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
-                      {item.desc}
-                    </div>
+                    <div className="text-xs text-gray-400">{item.desc}</div>
                   </div>
                 </button>
               ))}
