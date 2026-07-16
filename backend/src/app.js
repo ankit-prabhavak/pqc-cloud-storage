@@ -14,6 +14,7 @@ const app = express()
 
 app.use(helmet())
 app.use(morgan('dev'))
+app.set("trust proxy", 1); // trust first proxy (for rate limiting behind a proxy)
 
 app.use(cors({
   origin: process.env.CLIENT_URL,  // must be exact URL, no trailing slash
