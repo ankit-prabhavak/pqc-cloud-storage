@@ -505,20 +505,21 @@ export default function LandingPage() {
           }}
         />
 
-      <section className="relative z-10 w-full px-8 py-12 sm:px-12 lg:px-20 xl:px-28">
+        <section className="relative z-10 w-full px-8 py-12 sm:px-12 lg:px-20 xl:px-28">
           <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 lg:grid-cols-2">
             <div className="mx-auto max-w-lg text-left lg:mx-0">
               <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                Your files, encrypted
+                Security that starts
                 <br />
                 <span className="font-normal text-gray-500">
-                  before they leave your device.
+                  before your files leave your device.
                 </span>
               </h1>
 
               <p className="mb-6 max-w-lg text-lg leading-relaxed text-gray-500">
-                Secure cloud storage for files that need long-term protection, 
-                with client-side encryption, post-quantum key wrapping, and tamper-proof security.
+                XORS combines zero-knowledge architecture, client-side
+                encryption, and post-quantum cryptography to keep your data
+                private today and resilient against tomorrow's threats.
               </p>
 
               <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -907,176 +908,210 @@ export default function LandingPage() {
         </div>
       </section>
 
-     <section id="security" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
-  <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2">
-    <div>
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-        Security standards
-      </p>
-      <h2 className="mb-4 text-3xl font-bold text-gray-900">
-        Only NIST standardized cryptography
-      </h2>
-      <p className="mb-6 text-sm text-gray-600">
-        We do not use experimental or unvetted algorithms. Every primitive
-        in this stack has been standardized by NIST.
-      </p>
+      <section id="security" className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+        <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-2">
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Security standards
+            </p>
+            <h2 className="mb-4 text-3xl font-bold text-gray-900">
+              Only NIST standardized cryptography
+            </h2>
+            <p className="mb-6 text-sm text-gray-600">
+              We do not use experimental or unvetted algorithms. Every primitive
+              in this stack has been standardized by NIST.
+            </p>
 
-      <div className="space-y-3">
-        {[
-          { algo: "AES-256-GCM", std: "FIPS 197", purpose: "File encryption" },
-          { algo: "ML-KEM-768", std: "FIPS 203", purpose: "Key encapsulation (PQC)" },
-          { algo: "SHA-256", std: "FIPS 180-4", purpose: "Integrity hashing" },
-          { algo: "bcrypt (cost 12)", std: "RFC 2898", purpose: "Password hashing" },
-          { algo: "JWT RS256", std: "RFC 7519", purpose: "Stateless authentication" },
-        ].map((item) => (
-          <div
-            key={item.algo}
-            className="flex items-start gap-3 rounded-xl bg-gray-50/70 px-3 py-3"
-          >
-            <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-50">
-              <FiCheck size={12} color="#15803d" />
-            </div>
+            <div className="space-y-3">
+              {[
+                {
+                  algo: "AES-256-GCM",
+                  std: "FIPS 197",
+                  purpose: "File encryption",
+                },
+                {
+                  algo: "ML-KEM-768",
+                  std: "FIPS 203",
+                  purpose: "Key encapsulation (PQC)",
+                },
+                {
+                  algo: "SHA-256",
+                  std: "FIPS 180-4",
+                  purpose: "Integrity hashing",
+                },
+                {
+                  algo: "bcrypt (cost 12)",
+                  std: "RFC 2898",
+                  purpose: "Password hashing",
+                },
+                {
+                  algo: "JWT RS256",
+                  std: "RFC 7519",
+                  purpose: "Stateless authentication",
+                },
+              ].map((item) => (
+                <div
+                  key={item.algo}
+                  className="flex items-start gap-3 rounded-xl bg-gray-50/70 px-3 py-3"
+                >
+                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-50">
+                    <FiCheck size={12} color="#15803d" />
+                  </div>
 
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="font-mono text-sm font-semibold text-gray-900">
-                  {item.algo}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="font-mono text-sm font-semibold text-gray-900">
+                        {item.algo}
+                      </div>
+                      <div className="rounded-full bg-white px-2 py-0.5 text-[11px] text-gray-500">
+                        {item.std}
+                      </div>
+                    </div>
+                    <div className="mt-1 text-sm text-gray-600">
+                      {item.purpose}
+                    </div>
+                  </div>
                 </div>
-                <div className="rounded-full bg-white px-2 py-0.5 text-[11px] text-gray-500">
-                  {item.std}
-                </div>
-              </div>
-              <div className="mt-1 text-sm text-gray-600">{item.purpose}</div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    </div>
 
-   <div className="space-y-6 md:mt-10">
-      <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
-        <div className="bg-gradient-to-r from-gray-50 to-white p-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-50">
-                <FiFile size={16} color="#16a34a" />
+          <div className="space-y-6 md:mt-10">
+            <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+              <div className="bg-gradient-to-r from-gray-50 to-white p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-md bg-gray-50">
+                      <FiFile size={16} color="#16a34a" />
+                    </div>
+                    <div>
+                      <div className="font-mono text-sm font-semibold text-gray-900">
+                        research_paper_final.pdf
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        2.4 MB · Uploaded just now
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative h-16 w-16 shrink-0">
+                    <svg className="h-16 w-16 -rotate-90" viewBox="0 0 64 64">
+                      <defs>
+                        <linearGradient
+                          id="scoreGradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#16a34a" />
+                          <stop offset="100%" stopColor="#2563eb" />
+                        </linearGradient>
+                      </defs>
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="26"
+                        fill="none"
+                        stroke="#f3f4f6"
+                        strokeWidth="5"
+                      />
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="26"
+                        fill="none"
+                        stroke="url(#scoreGradient)"
+                        strokeWidth="5"
+                        strokeDasharray="163.4"
+                        strokeDashoffset="0"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="mono text-base font-bold text-gray-900">
+                        100
+                      </span>
+                      <span className="text-[10px] font-semibold tracking-[0.18em] text-gray-400">
+                        SCORE
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="font-mono text-sm font-semibold text-gray-900">
-                  research_paper_final.pdf
-                </div>
-                <div className="text-xs text-gray-400">
-                  2.4 MB · Uploaded just now
-                </div>
+
+              <div className="space-y-2 p-4">
+                {[
+                  {
+                    icon: Cpu,
+                    label: "ML-KEM post-quantum key wrapping",
+                    pts: 40,
+                    color: "#16a34a",
+                    bg: "bg-green-50",
+                  },
+                  {
+                    icon: ShieldCheck,
+                    label: "AES-GCM authentication tag",
+                    pts: 20,
+                    color: "#16a34a",
+                    bg: "bg-green-50",
+                  },
+                  {
+                    icon: Fingerprint,
+                    label: "SHA-256 integrity hash",
+                    pts: 20,
+                    color: "#1d4ed8",
+                    bg: "bg-blue-50",
+                  },
+                  {
+                    icon: TimerOff,
+                    label: "Self-destruct timer configured",
+                    pts: 10,
+                    color: "#b45309",
+                    bg: "bg-yellow-50",
+                  },
+                  {
+                    icon: EyeOff,
+                    label: "Private (no public share link)",
+                    pts: 10,
+                    color: "#b45309",
+                    bg: "bg-yellow-50",
+                  },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-gray-50"
+                  >
+                    <div
+                      className={`flex h-8 w-8 items-center justify-center rounded-md ${row.bg}`}
+                    >
+                      <row.icon size={14} color={row.color} />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm text-gray-700">{row.label}</div>
+                    </div>
+
+                    <div className="font-mono text-sm font-semibold text-gray-900">
+                      {row.pts}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="relative h-16 w-16 shrink-0">
-              <svg
-                className="h-16 w-16 -rotate-90"
-                viewBox="0 0 64 64"
-              >
-                <defs>
-                  <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#16a34a" />
-                    <stop offset="100%" stopColor="#2563eb" />
-                  </linearGradient>
-                </defs>
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="26"
-                  fill="none"
-                  stroke="#f3f4f6"
-                  strokeWidth="5"
-                />
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="26"
-                  fill="none"
-                  stroke="url(#scoreGradient)"
-                  strokeWidth="5"
-                  strokeDasharray="163.4"
-                  strokeDashoffset="0"
-                  strokeLinecap="round"
-                />
-              </svg>
-
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="mono text-base font-bold text-gray-900">100</span>
-                <span className="text-[10px] font-semibold tracking-[0.18em] text-gray-400">
-                  SCORE
-                </span>
+            <div className="border-t border-gray-100 px-5 py-4">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">Total score</div>
+                <div className="mono text-xl font-semibold text-gray-900">
+                  100
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="space-y-2 p-4">
-          {[
-            {
-              icon: Cpu,
-              label: "ML-KEM post-quantum key wrapping",
-              pts: 40,
-              color: "#16a34a",
-              bg: "bg-green-50",
-            },
-            {
-              icon: ShieldCheck,
-              label: "AES-GCM authentication tag",
-              pts: 20,
-              color: "#16a34a",
-              bg: "bg-green-50",
-            },
-            {
-              icon: Fingerprint,
-              label: "SHA-256 integrity hash",
-              pts: 20,
-              color: "#1d4ed8",
-              bg: "bg-blue-50",
-            },
-            {
-              icon: TimerOff,
-              label: "Self-destruct timer configured",
-              pts: 10,
-              color: "#b45309",
-              bg: "bg-yellow-50",
-            },
-            {
-              icon: EyeOff,
-              label: "Private (no public share link)",
-              pts: 10,
-              color: "#b45309",
-              bg: "bg-yellow-50",
-            },
-          ].map((row) => (
-            <div key={row.label} className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-gray-50">
-              <div className={`flex h-8 w-8 items-center justify-center rounded-md ${row.bg}`}>
-                <row.icon size={14} color={row.color} />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <div className="text-sm text-gray-700">{row.label}</div>
-              </div>
-
-              <div className="font-mono text-sm font-semibold text-gray-900">
-                {row.pts}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="border-t border-gray-100 px-5 py-4">
-  <div className="flex items-center justify-between">
-    <div className="text-sm text-gray-600">Total score</div>
-    <div className="mono text-xl font-semibold text-gray-900">100</div>
-  </div>
-</div>
-    </div>
-  </div>
-</section>
+      </section>
 
       <section id="use-cases" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-14">
@@ -1232,7 +1267,7 @@ export default function LandingPage() {
           <div className="max-w-[220px] flex-shrink-0">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-white">
-                <TbCloudComputing size={18} className="text-black"/>
+                <TbCloudComputing size={18} className="text-black" />
               </div>
               <span className="text-lg font-bold text-white">XORS</span>
             </div>
@@ -1306,13 +1341,13 @@ export default function LandingPage() {
         </div>
 
         <div className="flex justify-center mb-10">
-  <a
-    href="#top"
-    className="flex items-center gap-2 text-white text-sm font-semibold hover:underline underline-offset-4 transition-all duration-150"
-  >
-    Back to top
-    <FiArrowUp size={14} />
-  </a>
+          <a
+            href="#top"
+            className="flex items-center gap-2 text-white text-sm font-semibold hover:underline underline-offset-4 transition-all duration-150"
+          >
+            Back to top
+            <FiArrowUp size={14} />
+          </a>
         </div>
 
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
