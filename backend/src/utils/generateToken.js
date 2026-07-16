@@ -19,16 +19,16 @@ export const setCookies = (res, accessToken, refreshToken) => {
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: isProduction,           // must be true in production
-    sameSite: isProduction ? 'none' : 'strict',  // must be 'none' for cross-origin
-    maxAge: 15 * 60 * 1000
+    secure: isProduction,
+    sameSite: 'lax',       // was: isProduction ? 'none' : 'strict'
+    maxAge: 15 * 60 * 1000,
   })
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'none' : 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   })
 }
 
