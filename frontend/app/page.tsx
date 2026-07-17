@@ -165,7 +165,7 @@ export default function LandingPage() {
   useEffect(() => {
     const lenis = new Lenis({
       autoRaf: true,
-      lerp: 0.05,
+      lerp: 0.2,
       wheelMultiplier: 0.5,
     });
 
